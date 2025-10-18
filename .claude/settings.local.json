@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/abdulquadir/Desktop/Projects/Personal/**)",
+      "Bash(flutter pub:*)",
+      "Bash(flutter:*)",
+      "Bash(nc:*)",
+      "Bash(dart analyze:*)",
+      "Bash(pkill:*)",
+      "Bash(killall:*)",
+      "Read(//Users/abdulquadir/Desktop/Projects/plasticmart/**)",
+      "Bash(git init)",
+      "Bash(git add .)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
