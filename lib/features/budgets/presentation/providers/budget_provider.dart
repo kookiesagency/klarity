@@ -226,7 +226,6 @@ class BudgetNotifier extends StateNotifier<BudgetState> {
   Future<Result<BudgetModel>> updateBudget({
     required String budgetId,
     double? amount,
-    BudgetPeriod? period,
     DateTime? startDate,
     DateTime? endDate,
     int? alertThreshold,
@@ -237,7 +236,6 @@ class BudgetNotifier extends StateNotifier<BudgetState> {
     final result = await _repository.updateBudget(
       budgetId: budgetId,
       amount: amount,
-      period: period,
       startDate: startDate,
       endDate: endDate,
       alertThreshold: alertThreshold,

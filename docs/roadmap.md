@@ -397,8 +397,8 @@
   - [x] Budget alerts widget on home screen (top 3 warnings)
   - [x] Fixed RLS policies for budgets table
   - [x] Budget warning dialog in transaction form ✅ COMPLETED (Oct 2025)
-  - [x] Budget vs. Actual comparison chart ✅ COMPLETED (Oct 2025)
-  - [x] Multi-period budget support (daily/weekly/monthly/yearly) ✅ COMPLETED (Oct 2025)
+  - [x] Budget vs. Actual comparison chart ❌ REMOVED (per user request)
+  - [x] Multi-period budget support (daily/weekly/monthly/yearly) ❌ REMOVED (per user request)
   - [ ] Option to carry over unused budget to next month - FUTURE
 
 #### Deliverables:
@@ -757,10 +757,8 @@
    - Recent Transactions shows 5 items
    - Upcoming Recurring shows 3 items
 
-**✅ All Features Complete (Oct 2025):**
+**✅ Completed Features (Oct 2025):**
 - ✅ Budget warning dialog in transaction form
-- ✅ Budget vs Actual comparison chart
-- ✅ Multi-period budget support (daily/weekly/monthly/yearly)
 
 **Remaining Work:**
 - Final app testing
@@ -770,10 +768,10 @@
 
 ## Final Features Implementation (Oct 2025)
 
-### 1. Budget Warning Dialog
-**Status:** Already implemented
+### Budget Warning Dialog
+**Status:** ✅ Implemented
 
-The transaction form already includes a comprehensive budget warning system:
+The transaction form includes a comprehensive budget warning system:
 - Real-time budget checking when amount or category changes
 - Warning card displayed above save button
 - Shows current spent amount and budget limit
@@ -783,97 +781,10 @@ The transaction form already includes a comprehensive budget warning system:
 
 **Location:** `transaction_form_screen.dart` lines 766-826
 
-### 2. Budget vs Actual Comparison Chart
-**Status:** ✅ Completed October 2025
-
-Added grouped bar chart to Analytics > Budgets tab showing budget vs actual spending:
-
-**Features:**
-- Displays top 5 categories with budgets
-- Side-by-side bars for each category (Budget vs Actual)
-- Budget bars in blue, actual spending color-coded by status:
-  - Green: On track (safe)
-  - Orange: Warning level (51-80%)
-  - Deep Orange: Critical (81-99%)
-  - Red: Over budget (100%+)
-- Interactive tooltips showing exact amounts
-- Category icons on X-axis
-- Formatted Y-axis (₹0, ₹1k, ₹2k, etc.)
-- Legend for clarity
-- Empty state for when no budgets are set
-- Loading state while data fetches
-
-**Implementation:**
-- Method: `_buildBudgetVsActualChart()` in analytics_screen.dart
-- Uses fl_chart BarChart widget
-- Integrates with existing budget provider
-- Respects date range filter (Today/Week/Month/Year/Custom)
-
-**Chart Specifications:**
-- Height: 250px
-- Bar width: 12px
-- Rounded corners on bars
-- Grid lines for reference
-- Responsive scaling (max value + 20% padding)
-
-### 3. Multi-Period Budget Support
-**Status:** ✅ Completed October 2025
-
-Expanded budget system to support multiple time periods beyond just monthly:
-
-**Supported Periods:**
-- Daily budgets
-- Weekly budgets
-- Monthly budgets (existing default)
-- Yearly budgets
-
-**UI Changes:**
-- Added period selector to category form (Budget Limit section)
-- Bottom sheet selector with all 4 period options
-- Visual indicator showing selected period
-- Calendar icon for clarity
-- Loads existing period when editing category
-- Updates both create and edit flows
-
-**Backend Changes:**
-- Updated `BudgetModel` to support period field (already existed)
-- Updated `BudgetPeriod` enum with all periods (already existed)
-- Modified `budget_provider.dart`: Added period parameter to `updateBudget()`
-- Modified `budget_repository.dart`: Added period parameter to `updateBudget()`
-- Database already supports period column
-
-**Implementation Details:**
-- Period selector: Lines 702-745 in category_form_screen.dart
-- Bottom sheet: `_showBudgetPeriodSelector()` method
-- State management: `_selectedBudgetPeriod` variable
-- Database column: `period` (varchar) with values: 'daily', 'weekly', 'monthly', 'yearly'
-
-**User Experience:**
-- Default period: Monthly (maintains backward compatibility)
-- Period selection integrated into budget setup flow
-- Period displayed in budget overview
-- Period-aware spending calculations (handled by budget provider)
-
-### Implementation Summary
-
-All three features are now complete:
-1. ✅ Budget Warning Dialog (already implemented)
-2. ✅ Budget vs Actual Chart (new bar chart visualization)
-3. ✅ Multi-Period Budgets (daily/weekly/monthly/yearly support)
-
-**Total Development Time:** ~2 hours
-**Files Modified:** 5 files
-- analytics_screen.dart (new chart)
-- category_form_screen.dart (period selector)
-- budget_provider.dart (period parameter)
-- budget_repository.dart (period parameter)
-- roadmap.md (documentation)
-
-**Code Statistics:**
-- New method: `_buildBudgetVsActualChart()` (~330 lines)
-- New method: `_showBudgetPeriodSelector()` (~80 lines)
-- Updated methods: 2 (updateBudget in provider and repository)
-- Total additions: ~473 lines
+### Removed Features (Per User Request)
+The following features were initially implemented but removed as they were not needed:
+- Budget vs Actual comparison chart (removed from analytics screen)
+- Multi-period budget support (reverted to monthly-only budgets)
 
 ---
 

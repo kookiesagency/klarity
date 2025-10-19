@@ -32,7 +32,6 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
   String _selectedColor = CategoryColors.indigo;
   bool _isLoading = false;
   bool _enableBudget = false;
-  BudgetPeriod _selectedBudgetPeriod = BudgetPeriod.monthly;
 
   @override
   void initState() {
@@ -52,7 +51,6 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
               _enableBudget = true;
               _budgetAmountController.text = budget.amount.toStringAsFixed(0);
               _budgetThresholdController.text = budget.alertThreshold.toString();
-              _selectedBudgetPeriod = budget.period;
             });
           }
         });
@@ -114,7 +112,6 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
               await ref.read(budgetProvider.notifier).updateBudget(
                     budgetId: existingBudget.id,
                     amount: budgetAmount,
-                    period: _selectedBudgetPeriod,
                     alertThreshold: alertThreshold,
                   );
             } else {
@@ -122,7 +119,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
               await ref.read(budgetProvider.notifier).createBudget(
                     categoryId: category.id,
                     amount: budgetAmount,
-                    period: _selectedBudgetPeriod,
+                    period: BudgetPeriod.monthly,
                     alertThreshold: alertThreshold,
                   );
             }
@@ -307,85 +304,6 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
     } catch (e) {
       return Colors.purple;
     }
-  }
-
-  void _showBudgetPeriodSelector() {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) {
-        return DraggableScrollableSheet(
-          initialChildSize: 0.4,
-          minChildSize: 0.3,
-          maxChildSize: 0.6,
-          expand: false,
-          builder: (context, scrollController) {
-            return Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-              ),
-              child: Column(
-                children: [
-                  // Handle bar
-                  Container(
-                    width: 40,
-                    height: 4,
-                    margin: const EdgeInsets.symmetric(vertical: 12),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(2),
-                    ),
-                  ),
-                  // Title
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                    child: Text(
-                      'Select Budget Period',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
-                      ),
-                    ),
-                  ),
-                  const Divider(),
-                  // Period options
-                  Expanded(
-                    child: ListView(
-                      controller: scrollController,
-                      children: BudgetPeriod.values.map((period) {
-                        final isSelected = _selectedBudgetPeriod == period;
-                        return ListTile(
-                          leading: Icon(
-                            isSelected ? Icons.check_circle : Icons.circle_outlined,
-                            color: isSelected ? AppColors.lightPrimary : Colors.grey,
-                          ),
-                          title: Text(
-                            period.displayName,
-                            style: TextStyle(
-                              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                              color: isSelected ? AppColors.lightPrimary : AppColors.textPrimary,
-                            ),
-                          ),
-                          onTap: () {
-                            setState(() {
-                              _selectedBudgetPeriod = period;
-                            });
-                            Navigator.pop(context);
-                          },
-                        );
-                      }).toList(),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        );
-      },
-    );
   }
 
   @override
@@ -777,51 +695,6 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
                             return null;
                           }
                         : null,
-                  ),
-                  const SizedBox(height: 16),
-                  // Budget Period Selector
-                  InkWell(
-                    onTap: _isLoading ? null : _showBudgetPeriodSelector,
-                    borderRadius: BorderRadius.circular(12),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[50],
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.grey[200]!),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(Icons.calendar_today, color: Colors.grey[600], size: 20),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Budget Period',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.grey[600],
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                                const SizedBox(height: 2),
-                                Text(
-                                  _selectedBudgetPeriod.displayName,
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    color: AppColors.textPrimary,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Icon(Icons.arrow_drop_down, color: Colors.grey[600]),
-                        ],
-                      ),
-                    ),
                   ),
                   const SizedBox(height: 16),
                   TextFormField(
