@@ -149,6 +149,7 @@ class _PinSetupScreenState extends ConsumerState<PinSetupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
 
       body: SafeArea(
@@ -179,7 +180,7 @@ class _PinSetupScreenState extends ConsumerState<PinSetupScreen> {
                 style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 6),
@@ -191,7 +192,7 @@ class _PinSetupScreenState extends ConsumerState<PinSetupScreen> {
                     : 'Create a 4-digit PIN for quick access',
                 style: const TextStyle(
                   fontSize: 14,
-                  color: AppColors.textSecondary,
+                  color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                 ),
                 textAlign: TextAlign.center,
               ),

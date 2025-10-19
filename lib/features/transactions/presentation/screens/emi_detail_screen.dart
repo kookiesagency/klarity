@@ -217,6 +217,7 @@ class _EmiDetailScreenState extends ConsumerState<EmiDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     if (_emi == null) {
       return Scaffold(
         appBar: AppBar(
@@ -603,7 +604,7 @@ class _EmiDetailScreenState extends ConsumerState<EmiDetailScreen> {
               Text(
                 label,
                 style: const TextStyle(fontSize: 12).copyWith(
-                  color: AppColors.textSecondary,
+                  color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                 ),
               ),
               const SizedBox(height: 2),
@@ -648,7 +649,7 @@ class _EmiDetailScreenState extends ConsumerState<EmiDetailScreen> {
             Text(
               _emi!.notes!,
               style: const TextStyle(fontSize: 16).copyWith(
-                color: AppColors.textSecondary,
+                color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
               ),
             ),
           ],
@@ -733,14 +734,14 @@ class _EmiDetailScreenState extends ConsumerState<EmiDetailScreen> {
                       Text(
                         'No payments yet',
                         style: const TextStyle(fontSize: 16).copyWith(
-                          color: AppColors.textSecondary,
+                          color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         'Payments will appear here once processed',
                         style: const TextStyle(fontSize: 12).copyWith(
-                          color: AppColors.textSecondary,
+                          color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -785,7 +786,7 @@ class _EmiDetailScreenState extends ConsumerState<EmiDetailScreen> {
             'Upcoming Payments (${unpaidPayments.length})',
             style: const TextStyle(fontSize: 16).copyWith(
               fontWeight: FontWeight.w600,
-              color: AppColors.textSecondary,
+              color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
             ),
           ),
           const SizedBox(height: 12),

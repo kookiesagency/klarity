@@ -625,14 +625,15 @@ class _ForgotPinSheetState extends ConsumerState<_ForgotPinSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final bottomInset = MediaQuery.of(context).viewInsets.bottom;
 
     return Padding(
       padding: EdgeInsets.only(bottom: bottomInset),
       child: Container(
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.only(
+        decoration: BoxDecoration(
+          color: isDarkMode ? AppColors.darkSurface : Colors.white,
+          borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(24),
             topRight: Radius.circular(24),
           ),
@@ -647,12 +648,12 @@ class _ForgotPinSheetState extends ConsumerState<_ForgotPinSheet> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     'Reset PIN',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.textPrimary,
+                      color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                     ),
                   ),
                   IconButton(

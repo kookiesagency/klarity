@@ -92,6 +92,7 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -102,7 +103,7 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
         title: Text(
           isEditing ? 'Edit Account' : 'Add Account',
           style: const TextStyle(
-            color: AppColors.textPrimary,
+            color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -141,7 +142,7 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 12),
@@ -185,7 +186,7 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 12),
@@ -215,7 +216,7 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
-                              color: AppColors.textPrimary,
+                              color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                             ),
                           ),
                           const SizedBox(height: 2),
@@ -223,7 +224,7 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
                             'Type cannot be changed',
                             style: TextStyle(
                               fontSize: 12,
-                              color: AppColors.textSecondary,
+                              color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                             ),
                           ),
                         ],
@@ -284,7 +285,7 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
+                    color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                   ),
                 ),
                 const SizedBox(height: 12),

@@ -61,6 +61,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final activeProfile = ref.watch(activeProfileProvider);
 
     return Scaffold(
@@ -127,7 +128,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: AppColors.textPrimary,
+                            color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                           ),
                         ),
                         TextButton(
@@ -233,7 +234,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
-                            color: AppColors.textPrimary,
+                            color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                           ),
                         ),
                         TextButton(
@@ -401,7 +402,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconButton(
-                icon: const Icon(Icons.menu_rounded, color: AppColors.textPrimary),
+                icon: Icon(Icons.menu_rounded, color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary),
                 onPressed: () {},
               ),
               // Profile Selector
@@ -442,7 +443,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
               ),
               IconButton(
-                icon: const Icon(Icons.notifications_outlined, color: AppColors.textPrimary),
+                icon: Icon(Icons.notifications_outlined, color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary),
                 onPressed: () {},
               ),
             ],
@@ -455,7 +456,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             style: const TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
+              color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: 8),
@@ -477,14 +478,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
-                      color: AppColors.textSecondary,
+                      color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                     ),
                   ),
                   const SizedBox(width: 4),
                   const Icon(
                     Icons.keyboard_arrow_down_rounded,
                     size: 20,
-                    color: AppColors.textSecondary,
+                    color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                   ),
                 ],
               ),
@@ -517,7 +518,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 20),
@@ -550,7 +551,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: isActive ? FontWeight.bold : FontWeight.w600,
-                                      color: AppColors.textPrimary,
+                                      color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                                     ),
                                   ),
                                 ),
@@ -596,7 +597,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 20),
@@ -669,7 +670,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
             ),
@@ -722,7 +723,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           Text(
             title,
             style: const TextStyle(
-              color: AppColors.textSecondary,
+              color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
               fontSize: 13,
               fontWeight: FontWeight.w500,
             ),
@@ -731,7 +732,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           Text(
             amount,
             style: const TextStyle(
-              color: AppColors.textPrimary,
+              color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
               fontSize: 18,
               fontWeight: FontWeight.bold,
             ),
@@ -794,7 +795,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimary,
+                    color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                   ),
                 ),
                 const SizedBox(height: 2),
@@ -802,7 +803,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   subtitle,
                   style: const TextStyle(
                     fontSize: 13,
-                    color: AppColors.textSecondary,
+                    color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                   ),
                 ),
               ],
@@ -824,7 +825,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 date,
                 style: const TextStyle(
                   fontSize: 12,
-                  color: AppColors.textSecondary,
+                  color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                 ),
               ),
             ],
@@ -965,7 +966,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
+                    color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                   ),
                 ),
                 TextButton(
@@ -1062,7 +1063,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     style: const TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w600,
-                                      color: AppColors.textPrimary,
+                                      color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                                     ),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
@@ -1111,7 +1112,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               '₹${status.spent.toStringAsFixed(0)} / ₹${status.budget.amount.toStringAsFixed(0)}',
                               style: const TextStyle(
                                 fontSize: 12,
-                                color: AppColors.textSecondary,
+                                color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                               ),
                             ),
                             if (!isOverBudget)
@@ -1119,7 +1120,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 '₹${status.remaining.toStringAsFixed(0)} left',
                                 style: const TextStyle(
                                   fontSize: 12,
-                                  color: AppColors.textSecondary,
+                                  color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
@@ -1192,7 +1193,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
+                    color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                   ),
                 ),
                 TextButton(
@@ -1443,7 +1444,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
+                    color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                   ),
                 ),
                 TextButton(
@@ -1528,7 +1529,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               style: const TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.bold,
-                                color: AppColors.textPrimary,
+                                color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                               ),
                             ),
                             const SizedBox(height: 4),

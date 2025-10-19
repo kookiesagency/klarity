@@ -185,6 +185,7 @@ class _EmiAutoPaymentSettingsScreenState
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final state = ref.watch(autoPaymentProvider);
 
     return Scaffold(
@@ -237,7 +238,7 @@ class _EmiAutoPaymentSettingsScreenState
               'The service checks for due payments at your configured interval and creates '
               'transactions automatically.',
               style: const TextStyle(fontSize: 16).copyWith(
-                color: AppColors.textSecondary,
+                color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
               ),
             ),
             const SizedBox(height: 12),
@@ -338,7 +339,7 @@ class _EmiAutoPaymentSettingsScreenState
                   Icon(
                     Icons.access_time,
                     size: 16,
-                    color: AppColors.textSecondary,
+                    color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                   ),
                   const SizedBox(width: 8),
                   Expanded(
@@ -348,7 +349,7 @@ class _EmiAutoPaymentSettingsScreenState
                         Text(
                           'Last Processed',
                           style: const TextStyle(fontSize: 12).copyWith(
-                            color: AppColors.textSecondary,
+                            color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                           ),
                         ),
                         const SizedBox(height: 2),
@@ -427,7 +428,7 @@ class _EmiAutoPaymentSettingsScreenState
             Text(
               'How often should the system check for due payments?',
               style: const TextStyle(fontSize: 12).copyWith(
-                color: AppColors.textSecondary,
+                color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
               ),
             ),
             const SizedBox(height: 16),
@@ -478,7 +479,7 @@ class _EmiAutoPaymentSettingsScreenState
                 child: Text(
                   'Enable auto-payment to change the interval',
                   style: const TextStyle(fontSize: 12).copyWith(
-                    color: AppColors.textSecondary,
+                    color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                     fontStyle: FontStyle.italic,
                   ),
                 ),
@@ -517,7 +518,7 @@ class _EmiAutoPaymentSettingsScreenState
             Text(
               'Process all due EMI payments immediately',
               style: const TextStyle(fontSize: 12).copyWith(
-                color: AppColors.textSecondary,
+                color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
               ),
             ),
             const SizedBox(height: 16),

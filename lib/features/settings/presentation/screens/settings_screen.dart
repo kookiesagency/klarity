@@ -269,7 +269,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                           subtitle: 'Not available on this device',
                           trailing: const Icon(
                             Icons.info_outline,
-                            color: AppColors.textSecondary,
+                            color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                           ),
                         );
                       }
@@ -388,7 +388,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         trailing: const Icon(
                           Icons.arrow_forward_ios,
                           size: 16,
-                          color: AppColors.textSecondary,
+                          color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                         ),
                         onTap: () {
                           Navigator.push(
@@ -417,7 +417,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         trailing: const Icon(
                           Icons.arrow_forward_ios,
                           size: 16,
-                          color: AppColors.textSecondary,
+                          color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                         ),
                         onTap: () {
                           Navigator.push(
@@ -446,7 +446,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         trailing: const Icon(
                           Icons.arrow_forward_ios,
                           size: 16,
-                          color: AppColors.textSecondary,
+                          color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                         ),
                         onTap: () {
                           Navigator.push(
@@ -476,7 +476,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         trailing: const Icon(
                           Icons.arrow_forward_ios,
                           size: 16,
-                          color: AppColors.textSecondary,
+                          color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                         ),
                         onTap: () {
                           Navigator.push(
@@ -507,7 +507,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         trailing: const Icon(
                           Icons.arrow_forward_ios,
                           size: 16,
-                          color: AppColors.textSecondary,
+                          color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                         ),
                         onTap: () {
                           Navigator.push(

@@ -56,6 +56,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     // Listen to auth state changes
     ref.listen<AuthState>(authProvider, (previous, next) {
       if (next is Authenticated) {
@@ -99,7 +100,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
+                    color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -109,7 +110,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   'Sign in to continue',
                   style: TextStyle(
                     fontSize: 16,
-                    color: AppColors.textSecondary,
+                    color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                   ),
                 ),
                 const SizedBox(height: 40),
@@ -136,7 +137,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       _obscurePassword
                           ? Icons.visibility_off_outlined
                           : Icons.visibility_outlined,
-                      color: AppColors.textSecondary,
+                      color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                       size: 20,
                     ),
                     onPressed: () {
@@ -196,7 +197,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       child: Text(
                         'OR',
                         style: TextStyle(
-                          color: AppColors.textSecondary,
+                          color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                           fontSize: 12,
                         ),
                       ),
@@ -243,7 +244,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       Text(
                         "Don't have an account? ",
                         style: TextStyle(
-                          color: AppColors.textSecondary,
+                          color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                           fontSize: 14,
                         ),
                       ),

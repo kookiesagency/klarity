@@ -124,7 +124,7 @@ class RecurringTransactionDetailScreen extends ConsumerWidget {
         title: const Text(
           'Recurring Transaction',
           style: TextStyle(
-            color: AppColors.textPrimary,
+            color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -339,7 +339,7 @@ class RecurringTransactionDetailScreen extends ConsumerWidget {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
+                color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
               ),
             ),
             const SizedBox(height: 16),
@@ -462,7 +462,7 @@ class RecurringTransactionDetailScreen extends ConsumerWidget {
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
+                color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
               ),
             ),
             const SizedBox(height: 16),
@@ -533,6 +533,7 @@ class _DetailRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -582,7 +583,7 @@ class _DetailRow extends StatelessWidget {
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
-                            color: AppColors.textPrimary,
+                            color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                           ),
                         ),
                       ),

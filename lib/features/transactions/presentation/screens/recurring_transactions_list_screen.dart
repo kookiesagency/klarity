@@ -115,7 +115,7 @@ class _RecurringTransactionsListScreenState
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
+                color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
               ),
             ),
             const SizedBox(height: 24),
@@ -126,7 +126,7 @@ class _RecurringTransactionsListScreenState
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: AppColors.textPrimary,
+                color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
               ),
             ),
             const SizedBox(height: 12),
@@ -169,7 +169,7 @@ class _RecurringTransactionsListScreenState
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
-                color: AppColors.textPrimary,
+                color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
               ),
             ),
             const SizedBox(height: 12),
@@ -190,6 +190,7 @@ class _RecurringTransactionsListScreenState
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final state = ref.watch(recurringTransactionProvider);
     var recurringTransactions = state.recurringTransactions;
 
@@ -213,7 +214,7 @@ class _RecurringTransactionsListScreenState
         title: const Text(
           'Recurring Transactions',
           style: TextStyle(
-            color: AppColors.textPrimary,
+            color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -470,7 +471,7 @@ class _RecurringTransactionsListScreenState
                           style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
-                            color: AppColors.textSecondary,
+                            color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                           ),
                         ),
                       ],
@@ -491,7 +492,7 @@ class _RecurringTransactionsListScreenState
                       style: const TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.textSecondary,
+                        color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                       ),
                     ),
                   ),

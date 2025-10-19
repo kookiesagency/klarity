@@ -172,7 +172,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
+                color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
               ),
             ),
             const SizedBox(height: 20),
@@ -252,7 +252,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
+                color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
               ),
             ),
             const SizedBox(height: 24),
@@ -308,6 +308,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final selectedColor = _hexToColor(_selectedColor);
 
     return Scaffold(
@@ -320,7 +321,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
         title: Text(
           isEditing ? 'Edit Category' : 'Add Category',
           style: const TextStyle(
-            color: AppColors.textPrimary,
+            color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -362,7 +363,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 12),
@@ -406,7 +407,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 12),
@@ -440,7 +441,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
-                              color: AppColors.textPrimary,
+                              color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                             ),
                           ),
                           const SizedBox(height: 2),
@@ -448,7 +449,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
                             'Type cannot be changed',
                             style: TextStyle(
                               fontSize: 12,
-                              color: AppColors.textSecondary,
+                              color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                             ),
                           ),
                         ],
@@ -519,7 +520,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 12),
@@ -554,7 +555,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
                           'Tap to select icon',
                           style: TextStyle(
                             fontSize: 14,
-                            color: AppColors.textSecondary,
+                            color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                           ),
                         ),
                       ),
@@ -575,7 +576,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 12),
@@ -608,7 +609,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
                           'Tap to select color',
                           style: TextStyle(
                             fontSize: 14,
-                            color: AppColors.textSecondary,
+                            color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                           ),
                         ),
                       ),
@@ -638,7 +639,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.textPrimary,
+                          color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                         ),
                       ),
                     ),

@@ -133,6 +133,7 @@ class _ScheduledPaymentFormScreenState
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final accounts = ref.watch(accountsListProvider);
     final categories = _type == TransactionType.income
         ? ref.watch(incomeCategoriesProvider)
@@ -150,7 +151,7 @@ class _ScheduledPaymentFormScreenState
         title: Text(
           widget.payment == null ? 'New Scheduled Payment' : 'Edit Payment',
           style: const TextStyle(
-            color: AppColors.textPrimary,
+            color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -177,7 +178,7 @@ class _ScheduledPaymentFormScreenState
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: AppColors.textPrimary,
+                color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
               ),
             ),
             const SizedBox(height: 8),
@@ -224,7 +225,7 @@ class _ScheduledPaymentFormScreenState
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: AppColors.textPrimary,
+                color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
               ),
             ),
             const SizedBox(height: 8),
@@ -266,7 +267,7 @@ class _ScheduledPaymentFormScreenState
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: AppColors.textPrimary,
+                color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
               ),
             ),
             const SizedBox(height: 8),
@@ -279,7 +280,7 @@ class _ScheduledPaymentFormScreenState
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: AppColors.textPrimary,
+                color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
               ),
             ),
             const SizedBox(height: 8),
@@ -292,7 +293,7 @@ class _ScheduledPaymentFormScreenState
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: AppColors.textPrimary,
+                color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
               ),
             ),
             const SizedBox(height: 8),
@@ -305,7 +306,7 @@ class _ScheduledPaymentFormScreenState
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: AppColors.textPrimary,
+                color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
               ),
             ),
             const SizedBox(height: 8),
@@ -318,7 +319,7 @@ class _ScheduledPaymentFormScreenState
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
-                color: AppColors.textPrimary,
+                color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
               ),
             ),
             const SizedBox(height: 8),
@@ -522,7 +523,7 @@ class _ScheduledPaymentFormScreenState
               DateFormat('MMM dd, yyyy').format(_dueDate),
               style: const TextStyle(
                 fontSize: 16,
-                color: AppColors.textPrimary,
+                color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
               ),
             ),
             Icon(Icons.calendar_today, size: 20, color: Colors.grey[600]),

@@ -25,7 +25,7 @@ class AccountSwitcher extends ConsumerWidget {
           Text(
             activeAccount.name,
             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: AppColors.textSecondary,
+                  color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                   fontWeight: FontWeight.w500,
                 ),
           ),
@@ -33,7 +33,7 @@ class AccountSwitcher extends ConsumerWidget {
           const Icon(
             Icons.keyboard_arrow_down_rounded,
             size: 20,
-            color: AppColors.textSecondary,
+            color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
           ),
         ],
       ),
@@ -77,7 +77,7 @@ class AccountSwitcher extends ConsumerWidget {
                     'Select Account',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: AppColors.textPrimary,
+                          color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                         ),
                   ),
                   const Spacer(),
@@ -138,7 +138,7 @@ class AccountSwitcher extends ConsumerWidget {
                               style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
-                                color: AppColors.textPrimary,
+                                color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                               ),
                             ),
                             const SizedBox(height: 2),
@@ -146,7 +146,7 @@ class AccountSwitcher extends ConsumerWidget {
                               account.type.displayName,
                               style: const TextStyle(
                                 fontSize: 13,
-                                color: AppColors.textSecondary,
+                                color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                               ),
                             ),
                           ],
@@ -162,7 +162,7 @@ class AccountSwitcher extends ConsumerWidget {
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
-                              color: AppColors.textPrimary,
+                              color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                             ),
                           ),
                           if (isActive)

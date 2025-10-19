@@ -80,6 +80,7 @@ class _ProfileFormScreenState extends ConsumerState<ProfileFormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -90,7 +91,7 @@ class _ProfileFormScreenState extends ConsumerState<ProfileFormScreen> {
         title: Text(
           isEditing ? 'Edit Profile' : 'Add Profile',
           style: const TextStyle(
-            color: AppColors.textPrimary,
+            color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -129,7 +130,7 @@ class _ProfileFormScreenState extends ConsumerState<ProfileFormScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 12),
@@ -177,7 +178,7 @@ class _ProfileFormScreenState extends ConsumerState<ProfileFormScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 8),

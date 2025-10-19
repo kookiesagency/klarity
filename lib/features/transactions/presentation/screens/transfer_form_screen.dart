@@ -279,6 +279,7 @@ class _TransferFormScreenState extends ConsumerState<TransferFormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final accountState = ref.watch(accountProvider);
     final accounts = accountState.accounts;
 
@@ -301,7 +302,7 @@ class _TransferFormScreenState extends ConsumerState<TransferFormScreen> {
         title: const Text(
           'Transfer Money',
           style: TextStyle(
-            color: AppColors.textPrimary,
+            color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -337,7 +338,7 @@ class _TransferFormScreenState extends ConsumerState<TransferFormScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 12),
@@ -351,7 +352,7 @@ class _TransferFormScreenState extends ConsumerState<TransferFormScreen> {
                 style: const TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
                 decoration: InputDecoration(
                   hintText: '0.00',
@@ -359,7 +360,7 @@ class _TransferFormScreenState extends ConsumerState<TransferFormScreen> {
                   prefixStyle: const TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textSecondary,
+                    color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                   ),
                   filled: true,
                   fillColor: Colors.grey[50],
@@ -396,7 +397,7 @@ class _TransferFormScreenState extends ConsumerState<TransferFormScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 12),
@@ -496,7 +497,7 @@ class _TransferFormScreenState extends ConsumerState<TransferFormScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 12),
@@ -569,7 +570,7 @@ class _TransferFormScreenState extends ConsumerState<TransferFormScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 12),
@@ -609,7 +610,7 @@ class _TransferFormScreenState extends ConsumerState<TransferFormScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 12),

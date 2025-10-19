@@ -99,6 +99,7 @@ class _EmiListScreenState extends ConsumerState<EmiListScreen>
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final state = ref.watch(emiProvider);
     final activeProfile = ref.watch(activeProfileProvider);
 
@@ -122,7 +123,7 @@ class _EmiListScreenState extends ConsumerState<EmiListScreen>
             const Text(
               'EMIs',
               style: TextStyle(
-                color: AppColors.textPrimary,
+                color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
@@ -132,7 +133,7 @@ class _EmiListScreenState extends ConsumerState<EmiListScreen>
                 activeProfile.name,
                 style: const TextStyle(
                   fontSize: 12,
-                  color: AppColors.textSecondary,
+                  color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                   fontWeight: FontWeight.normal,
                 ),
               ),
@@ -566,7 +567,7 @@ class _EmiListScreenState extends ConsumerState<EmiListScreen>
                         style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.textSecondary,
+                          color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                         ),
                       ),
                       Text(

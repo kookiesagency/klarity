@@ -90,7 +90,7 @@ class TransactionCard extends ConsumerWidget {
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
-                              color: AppColors.textPrimary,
+                              color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                             ),
                             overflow: TextOverflow.ellipsis,
                             maxLines: 1,

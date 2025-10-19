@@ -53,6 +53,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     if (_emailSent) {
       return _buildEmailSentView();
     }
@@ -104,7 +105,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
+                    color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -114,7 +115,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                   'Enter your email to receive a password reset link',
                   style: TextStyle(
                     fontSize: 16,
-                    color: AppColors.textSecondary,
+                    color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                   ),
                 ),
                 const SizedBox(height: 40),
@@ -147,7 +148,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                       Text(
                         "Remember your password? ",
                         style: TextStyle(
-                          color: AppColors.textSecondary,
+                          color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                           fontSize: 14,
                         ),
                       ),
@@ -224,7 +225,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                   style: TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
+                    color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -237,7 +238,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                   'We\'ve sent a password reset link to your email',
                   style: TextStyle(
                     fontSize: 16,
-                    color: AppColors.textSecondary,
+                    color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -249,7 +250,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                 'Please check your inbox and follow the instructions to reset your password.',
                 style: TextStyle(
                   fontSize: 14,
-                  color: AppColors.textSecondary,
+                  color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                   height: 1.5,
                 ),
                 textAlign: TextAlign.center,

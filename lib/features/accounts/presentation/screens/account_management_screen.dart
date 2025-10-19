@@ -91,6 +91,7 @@ class _AccountManagementScreenState extends ConsumerState<AccountManagementScree
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final accountState = ref.watch(accountProvider);
     final accounts = accountState.accounts;
     final activeProfile = ref.watch(activeProfileProvider);
@@ -115,7 +116,7 @@ class _AccountManagementScreenState extends ConsumerState<AccountManagementScree
             const Text(
               'Accounts',
               style: TextStyle(
-                color: AppColors.textPrimary,
+                color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
@@ -125,7 +126,7 @@ class _AccountManagementScreenState extends ConsumerState<AccountManagementScree
                 activeProfile.name,
                 style: const TextStyle(
                   fontSize: 12,
-                  color: AppColors.textSecondary,
+                  color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                   fontWeight: FontWeight.normal,
                 ),
               ),
@@ -248,7 +249,7 @@ class _AccountManagementScreenState extends ConsumerState<AccountManagementScree
                                             style: const TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold,
-                                              color: AppColors.textPrimary,
+                                              color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                                             ),
                                           ),
                                           const SizedBox(height: 4),

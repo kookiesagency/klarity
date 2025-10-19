@@ -93,7 +93,7 @@ class ProfileManagementScreen extends ConsumerWidget {
         title: const Text(
           'Manage Profiles',
           style: TextStyle(
-            color: AppColors.textPrimary,
+            color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),

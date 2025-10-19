@@ -675,7 +675,7 @@ class _TransactionListScreenState extends ConsumerState<TransactionListScreen> {
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: AppColors.textPrimary,
+                color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
               ),
             ),
             const SizedBox(height: 20),
@@ -991,6 +991,7 @@ class _TransactionListScreenState extends ConsumerState<TransactionListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final transactionState = ref.watch(transactionProvider);
     final allTransactions = transactionState.transactions;
     final filteredTransactions = _getFilteredTransactions(allTransactions);
@@ -1216,7 +1217,7 @@ class _TransactionListScreenState extends ConsumerState<TransactionListScreen> {
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const Spacer(),

@@ -369,6 +369,7 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final accountState = ref.watch(accountProvider);
     final accounts = accountState.accounts;
 
@@ -398,7 +399,7 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
         title: Text(
           isEditing ? 'Edit Transaction' : 'Add Transaction',
           style: const TextStyle(
-            color: AppColors.textPrimary,
+            color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -520,7 +521,7 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 12),
@@ -534,7 +535,7 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
                 style: const TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
                 decoration: InputDecoration(
                   hintText: '0.00',
@@ -542,7 +543,7 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
                   prefixStyle: const TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textSecondary,
+                    color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                   ),
                   filled: true,
                   fillColor: Colors.grey[50],
@@ -579,7 +580,7 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 12),
@@ -637,7 +638,7 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 12),
@@ -695,7 +696,7 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 12),
@@ -735,7 +736,7 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 12),

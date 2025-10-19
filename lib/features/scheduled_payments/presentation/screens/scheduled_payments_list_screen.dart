@@ -34,6 +34,7 @@ class _ScheduledPaymentsListScreenState
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final paymentState = ref.watch(scheduledPaymentProvider);
 
     return Scaffold(
@@ -151,7 +152,7 @@ class _ScheduledPaymentsListScreenState
                           style: const TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
-                            color: AppColors.textPrimary,
+                            color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                           ),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,

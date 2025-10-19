@@ -104,6 +104,7 @@ class _CategoryManagementScreenState extends ConsumerState<CategoryManagementScr
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final categoryState = ref.watch(categoryProvider);
     final expenseCategories = categoryState.expenseCategories;
     final incomeCategories = categoryState.incomeCategories;
@@ -123,7 +124,7 @@ class _CategoryManagementScreenState extends ConsumerState<CategoryManagementScr
             const Text(
               'Categories',
               style: TextStyle(
-                color: AppColors.textPrimary,
+                color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
@@ -133,7 +134,7 @@ class _CategoryManagementScreenState extends ConsumerState<CategoryManagementScr
                 activeProfile.name,
                 style: const TextStyle(
                   fontSize: 12,
-                  color: AppColors.textSecondary,
+                  color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                   fontWeight: FontWeight.normal,
                 ),
               ),
@@ -333,7 +334,7 @@ class _CategoryManagementScreenState extends ConsumerState<CategoryManagementScr
                                   style: const TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
-                                    color: AppColors.textPrimary,
+                                    color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                                   ),
                                 ),
                                 if (budgetStatus != null) ...[

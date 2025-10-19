@@ -463,6 +463,7 @@ class _RecurringTransactionFormScreenState
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final accountState = ref.watch(accountProvider);
     final categoryState = ref.watch(categoryProvider);
 
@@ -513,7 +514,7 @@ class _RecurringTransactionFormScreenState
               ? 'Edit Recurring Transaction'
               : 'New Recurring Transaction',
           style: const TextStyle(
-            color: AppColors.textPrimary,
+            color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -607,7 +608,7 @@ class _RecurringTransactionFormScreenState
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 12),
@@ -621,7 +622,7 @@ class _RecurringTransactionFormScreenState
                 style: const TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
                 decoration: InputDecoration(
                   hintText: '0.00',
@@ -629,7 +630,7 @@ class _RecurringTransactionFormScreenState
                   prefixStyle: const TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textSecondary,
+                    color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                   ),
                   filled: true,
                   fillColor: Colors.grey[50],
@@ -666,7 +667,7 @@ class _RecurringTransactionFormScreenState
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 12),
@@ -724,7 +725,7 @@ class _RecurringTransactionFormScreenState
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 12),
@@ -781,7 +782,7 @@ class _RecurringTransactionFormScreenState
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 12),
@@ -827,7 +828,7 @@ class _RecurringTransactionFormScreenState
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 12),
@@ -869,7 +870,7 @@ class _RecurringTransactionFormScreenState
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
+                      color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                     ),
                   ),
                   const SizedBox(width: 8),
@@ -941,7 +942,7 @@ class _RecurringTransactionFormScreenState
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 12),
@@ -981,7 +982,7 @@ class _RecurringTransactionFormScreenState
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 12),

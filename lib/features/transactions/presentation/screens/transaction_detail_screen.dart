@@ -139,7 +139,7 @@ class TransactionDetailScreen extends ConsumerWidget {
         title: const Text(
           'Transaction Details',
           style: TextStyle(
-            color: AppColors.textPrimary,
+            color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -375,6 +375,7 @@ class _DetailRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -423,7 +424,7 @@ class _DetailRow extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.textPrimary,
+                          color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                         ),
                       ),
                     ),

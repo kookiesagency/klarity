@@ -334,6 +334,7 @@ class _EmiFormScreenState extends ConsumerState<EmiFormScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final accountState = ref.watch(accountProvider);
     final categoryState = ref.watch(categoryProvider);
 
@@ -382,7 +383,7 @@ class _EmiFormScreenState extends ConsumerState<EmiFormScreen> {
         title: Text(
           isEditing ? 'Edit EMI' : 'New EMI',
           style: const TextStyle(
-            color: AppColors.textPrimary,
+            color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -418,7 +419,7 @@ class _EmiFormScreenState extends ConsumerState<EmiFormScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 12),
@@ -458,7 +459,7 @@ class _EmiFormScreenState extends ConsumerState<EmiFormScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 12),
@@ -492,7 +493,7 @@ class _EmiFormScreenState extends ConsumerState<EmiFormScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 12),
@@ -506,7 +507,7 @@ class _EmiFormScreenState extends ConsumerState<EmiFormScreen> {
                 style: const TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
                 decoration: InputDecoration(
                   hintText: '0.00',
@@ -514,7 +515,7 @@ class _EmiFormScreenState extends ConsumerState<EmiFormScreen> {
                   prefixStyle: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textSecondary,
+                    color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                   ),
                   filled: true,
                   fillColor: isEditing ? Colors.grey[100] : Colors.grey[50],
@@ -552,7 +553,7 @@ class _EmiFormScreenState extends ConsumerState<EmiFormScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 12),
@@ -604,7 +605,7 @@ class _EmiFormScreenState extends ConsumerState<EmiFormScreen> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
+                    color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -669,7 +670,7 @@ class _EmiFormScreenState extends ConsumerState<EmiFormScreen> {
                           'Use this if you\'ve already made some payments on this EMI',
                           style: TextStyle(
                             fontSize: 12,
-                            color: AppColors.textSecondary,
+                            color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                           ),
                         ),
                       ),
@@ -685,7 +686,7 @@ class _EmiFormScreenState extends ConsumerState<EmiFormScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 12),
@@ -707,7 +708,7 @@ class _EmiFormScreenState extends ConsumerState<EmiFormScreen> {
                   prefixStyle: const TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textSecondary,
+                    color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                   ),
                   filled: true,
                   fillColor: Colors.grey[50],
@@ -744,7 +745,7 @@ class _EmiFormScreenState extends ConsumerState<EmiFormScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 12),
@@ -802,7 +803,7 @@ class _EmiFormScreenState extends ConsumerState<EmiFormScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 12),
@@ -860,7 +861,7 @@ class _EmiFormScreenState extends ConsumerState<EmiFormScreen> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
+                    color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -912,7 +913,7 @@ class _EmiFormScreenState extends ConsumerState<EmiFormScreen> {
                           'When did the EMI/loan actually start? Use a past date for existing loans.',
                           style: TextStyle(
                             fontSize: 12,
-                            color: AppColors.textSecondary,
+                            color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                           ),
                         ),
                       ),
@@ -927,7 +928,7 @@ class _EmiFormScreenState extends ConsumerState<EmiFormScreen> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
+                    color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -994,7 +995,7 @@ class _EmiFormScreenState extends ConsumerState<EmiFormScreen> {
                           'On which day of the month is the EMI payment due? (e.g., 2 for 2nd, 15 for 15th)',
                           style: TextStyle(
                             fontSize: 12,
-                            color: AppColors.textSecondary,
+                            color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                           ),
                         ),
                       ),
