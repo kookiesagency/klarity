@@ -19,6 +19,8 @@ class TransactionState {
   final List<TransactionModel> transactions;
   final List<TransferModel> transfers;
   final bool isLoading;
+  final bool isLoadingMore;
+  final bool hasMore;
   final String? error;
   final Set<String> selectedTransactionIds;
 
@@ -26,6 +28,8 @@ class TransactionState {
     this.transactions = const [],
     this.transfers = const [],
     this.isLoading = false,
+    this.isLoadingMore = false,
+    this.hasMore = true,
     this.error,
     this.selectedTransactionIds = const {},
   });
@@ -69,6 +73,8 @@ class TransactionState {
     List<TransactionModel>? transactions,
     List<TransferModel>? transfers,
     bool? isLoading,
+    bool? isLoadingMore,
+    bool? hasMore,
     String? error,
     Set<String>? selectedTransactionIds,
   }) {
@@ -76,6 +82,8 @@ class TransactionState {
       transactions: transactions ?? this.transactions,
       transfers: transfers ?? this.transfers,
       isLoading: isLoading ?? this.isLoading,
+      isLoadingMore: isLoadingMore ?? this.isLoadingMore,
+      hasMore: hasMore ?? this.hasMore,
       error: error,
       selectedTransactionIds: selectedTransactionIds ?? this.selectedTransactionIds,
     );
@@ -118,7 +126,7 @@ class TransactionNotifier extends StateNotifier<TransactionState> {
     });
   }
 
-  /// Load all transactions for profile
+  /// Load all transactions for profile (without pagination)
   Future<void> loadTransactions(String profileId) async {
     state = state.copyWith(isLoading: true);
 
@@ -132,12 +140,75 @@ class TransactionNotifier extends StateNotifier<TransactionState> {
         state = state.copyWith(
           transactions: transactions,
           isLoading: false,
+          hasMore: false, // Loaded all
           error: null,
         );
       },
       onFailure: (exception) {
         state = state.copyWith(
           isLoading: false,
+          error: exception.message,
+        );
+      },
+    );
+  }
+
+  /// Load initial page of transactions (optimized for performance)
+  Future<void> loadTransactionsPaginated(String profileId, {int limit = 100}) async {
+    state = state.copyWith(isLoading: true, hasMore: true);
+
+    // Auto-lock transactions older than 2 months
+    await _repository.autoLockOldTransactions(profileId);
+
+    final result = await _repository.getTransactionsPaginated(
+      profileId: profileId,
+      limit: limit,
+      offset: 0,
+    );
+
+    result.fold(
+      onSuccess: (transactions) {
+        state = state.copyWith(
+          transactions: transactions,
+          isLoading: false,
+          hasMore: transactions.length >= limit,
+          error: null,
+        );
+      },
+      onFailure: (exception) {
+        state = state.copyWith(
+          isLoading: false,
+          error: exception.message,
+        );
+      },
+    );
+  }
+
+  /// Load more transactions (infinite scroll)
+  Future<void> loadMoreTransactions(String profileId, {int limit = 100}) async {
+    // Don't load if already loading or no more data
+    if (state.isLoadingMore || !state.hasMore) return;
+
+    state = state.copyWith(isLoadingMore: true);
+
+    final result = await _repository.getTransactionsPaginated(
+      profileId: profileId,
+      limit: limit,
+      offset: state.transactions.length,
+    );
+
+    result.fold(
+      onSuccess: (newTransactions) {
+        state = state.copyWith(
+          transactions: [...state.transactions, ...newTransactions],
+          isLoadingMore: false,
+          hasMore: newTransactions.length >= limit,
+          error: null,
+        );
+      },
+      onFailure: (exception) {
+        state = state.copyWith(
+          isLoadingMore: false,
           error: exception.message,
         );
       },

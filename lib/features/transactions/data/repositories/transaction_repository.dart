@@ -41,6 +41,42 @@ class TransactionRepository {
     }
   }
 
+  /// Get paginated transactions for current profile
+  /// Optimized for lazy loading with limit and offset
+  Future<Result<List<TransactionModel>>> getTransactionsPaginated({
+    required String profileId,
+    int limit = 100,
+    int offset = 0,
+  }) async {
+    try {
+      final response = await _supabase
+          .from(ApiConstants.transactionsTable)
+          .select('''
+            id, profile_id, account_id, category_id, type, amount, description,
+            transaction_date, is_locked, created_at, updated_at,
+            accounts!inner(name),
+            categories!inner(name, icon)
+          ''')
+          .eq('profile_id', profileId)
+          .order('transaction_date', ascending: false)
+          .order('created_at', ascending: false)
+          .range(offset, offset + limit - 1);
+
+      final transactions = (response as List).map((json) {
+        return TransactionModel.fromJson({
+          ...json,
+          'account_name': json['accounts']?['name'],
+          'category_name': json['categories']?['name'],
+          'category_icon': json['categories']?['icon'],
+        });
+      }).toList();
+
+      return Success(transactions);
+    } catch (e, stackTrace) {
+      return Failure(ErrorHandler.handle(e, stackTrace: stackTrace));
+    }
+  }
+
   /// Get transactions by account
   Future<Result<List<TransactionModel>>> getTransactionsByAccount({
     required String profileId,

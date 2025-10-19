@@ -13,6 +13,8 @@ import '../../../categories/presentation/providers/category_provider.dart';
 import '../../../categories/presentation/screens/category_management_screen.dart';
 import '../../../transactions/presentation/providers/emi_provider.dart';
 import '../../../transactions/presentation/screens/emi_list_screen.dart';
+import '../../../scheduled_payments/presentation/providers/scheduled_payment_provider.dart';
+import '../../../scheduled_payments/presentation/screens/scheduled_payments_list_screen.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -37,6 +39,8 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         ref.read(categoryProvider.notifier).loadCategories(activeProfile.id);
         // Load EMIs
         ref.read(emiProvider.notifier).loadEmis(activeProfile.id);
+        // Load scheduled payments
+        ref.read(scheduledPaymentProvider.notifier).loadScheduledPayments(activeProfile.id);
       }
     });
   }
@@ -432,6 +436,37 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => const EmiListScreen(),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  // Manage Scheduled Payments Tile
+                  Builder(
+                    builder: (context) {
+                      final paymentState = ref.watch(scheduledPaymentProvider);
+                      final pendingCount = paymentState.pendingPayments.length;
+                      final partialCount = paymentState.partialPayments.length;
+                      final overdueCount = paymentState.overduePayments.length;
+
+                      return _SettingsTile(
+                        icon: Icons.event_note_outlined,
+                        title: 'Scheduled Payments',
+                        subtitle: '$pendingCount pending${partialCount > 0 ? ' • $partialCount partial' : ''}${overdueCount > 0 ? ' • $overdueCount overdue' : ''}',
+                        trailing: const Icon(
+                          Icons.arrow_forward_ios,
+                          size: 16,
+                          color: AppColors.textSecondary,
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ScheduledPaymentsListScreen(),
                             ),
                           );
                         },

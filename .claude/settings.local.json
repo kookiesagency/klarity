@@ -10,7 +10,12 @@
       "Bash(killall:*)",
       "Read(//Users/abdulquadir/Desktop/Projects/plasticmart/**)",
       "Bash(git init)",
-      "Bash(git add .)"
+      "Bash(git add .)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nInitial commit - Klarity Finance Tracking App\n\nPhase 8 Complete:\n- Auto-lock transactions older than 2 months\n- Unlock on-demand when editing/deleting\n- Transaction overflow fixes\n- Lock icon in rounded badge (top right corner)\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git branch -M main)",
+      "Bash(git remote add origin https://github.com/teamzero-aaq/finance_tracking.git)",
+      "Bash(git push -u origin main)",
+      "Bash(cat /Users/abdulquadir/Desktop/Projects/Personal/finance_tracking/docs/context.md)"
     ],
     "deny": [],
     "ask": []

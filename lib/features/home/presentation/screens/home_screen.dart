@@ -22,6 +22,9 @@ import '../../../categories/presentation/screens/category_detail_screen.dart';
 import '../../../categories/presentation/screens/category_management_screen.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../../auth/domain/models/auth_state.dart';
+import '../../../scheduled_payments/presentation/providers/scheduled_payment_provider.dart';
+import '../../../scheduled_payments/presentation/screens/scheduled_payments_list_screen.dart';
+import '../../../scheduled_payments/presentation/screens/scheduled_payment_detail_screen.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -340,6 +343,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         );
                       },
                     ),
+                    const SizedBox(height: 24),
+
+                    // Scheduled Payments Section
+                    _buildUpcomingScheduledPayments(),
+
                     const SizedBox(height: 24),
 
                     // EMI Overview (moved to bottom)
@@ -1409,6 +1417,166 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ],
               ),
             ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildUpcomingScheduledPayments() {
+    return Consumer(
+      builder: (context, ref, child) {
+        final upcomingPayments = ref.watch(upcomingPaymentsProvider);
+
+        // Don't show if no upcoming payments
+        if (upcomingPayments.isEmpty) {
+          return const SizedBox.shrink();
+        }
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'Scheduled Payments',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ScheduledPaymentsListScreen(),
+                      ),
+                    );
+                  },
+                  child: const Text(
+                    'See All',
+                    style: TextStyle(
+                      color: AppColors.primary,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+
+            // Scheduled Payments List (show up to 3)
+            ...upcomingPayments.take(3).map((payment) {
+              final dateFormat = DateFormat('MMM dd');
+              return Container(
+                margin: const EdgeInsets.only(bottom: 12),
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(
+                    color: payment.isOverdue ? Colors.red : Colors.grey[200]!,
+                    width: payment.isOverdue ? 2 : 1,
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.1),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ScheduledPaymentDetailScreen(
+                          payment: payment,
+                        ),
+                      ),
+                    );
+                  },
+                  child: Row(
+                    children: [
+                      // Category icon
+                      Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: payment.type.color.withOpacity(0.1),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Center(
+                          child: Text(
+                            payment.categoryIcon ?? '📁',
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+
+                      // Payment info
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              payment.payeeName,
+                              style: const TextStyle(
+                                fontSize: 15,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.textPrimary,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.calendar_today,
+                                  size: 14,
+                                  color: payment.isOverdue
+                                      ? Colors.red
+                                      : Colors.grey[600],
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  payment.isOverdue
+                                      ? 'Overdue'
+                                      : 'Due ${dateFormat.format(payment.dueDate)}',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    color: payment.isOverdue
+                                        ? Colors.red
+                                        : Colors.grey[600],
+                                    fontWeight: payment.isOverdue
+                                        ? FontWeight.bold
+                                        : FontWeight.normal,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      // Amount
+                      Text(
+                        '₹${payment.amount.toStringAsFixed(2)}',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: payment.type.color,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }).toList(),
           ],
         );
       },

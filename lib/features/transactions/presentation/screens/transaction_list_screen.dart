@@ -8,6 +8,7 @@ import '../../../profile/presentation/providers/profile_provider.dart';
 import '../../domain/models/transaction_model.dart';
 import '../../domain/models/transaction_type.dart';
 import '../providers/transaction_provider.dart';
+import '../widgets/transaction_card.dart';
 import 'transaction_form_screen.dart';
 import 'transaction_detail_screen.dart';
 
@@ -26,11 +27,46 @@ class _TransactionListScreenState extends ConsumerState<TransactionListScreen> {
   DateTime? _filterEndDate;
   bool _isSelectionMode = false;
 
+  // Cache for grouped transactions to avoid recalculating on every rebuild
+  List<TransactionModel>? _cachedTransactions;
+  Map<String, List<TransactionModel>>? _cachedGroupedTransactions;
+  List<String>? _cachedSortedDates;
+
+  // Scroll controller for infinite scroll
+  final ScrollController _scrollController = ScrollController();
+
   @override
   void initState() {
     super.initState();
     // Delay loading to avoid modifying provider during build
     Future.microtask(() => _loadData());
+
+    // Add scroll listener for infinite scroll
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll);
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  /// Handle scroll events for infinite scroll
+  void _onScroll() {
+    if (_isLoadingMore) return;
+
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    final currentScroll = _scrollController.position.pixels;
+    final delta = 200.0; // Load more when 200px from bottom
+
+    if (maxScroll - currentScroll <= delta) {
+      _loadMoreData();
+    }
+  }
+
+  bool get _isLoadingMore {
+    return ref.read(transactionProvider).isLoadingMore;
   }
 
   void _enterSelectionMode() {
@@ -53,7 +89,21 @@ class _TransactionListScreenState extends ConsumerState<TransactionListScreen> {
   Future<void> _loadData() async {
     final activeProfile = ref.read(activeProfileProvider);
     if (activeProfile != null) {
-      await ref.read(transactionProvider.notifier).loadTransactions(activeProfile.id);
+      // Use paginated loading for better performance
+      await ref.read(transactionProvider.notifier).loadTransactionsPaginated(
+        activeProfile.id,
+        limit: 100,
+      );
+    }
+  }
+
+  Future<void> _loadMoreData() async {
+    final activeProfile = ref.read(activeProfileProvider);
+    if (activeProfile != null) {
+      await ref.read(transactionProvider.notifier).loadMoreTransactions(
+        activeProfile.id,
+        limit: 100,
+      );
     }
   }
 
@@ -1072,27 +1122,53 @@ class _TransactionListScreenState extends ConsumerState<TransactionListScreen> {
   }
 
   Widget _buildTransactionList(List<TransactionModel> transactions) {
-    // Group transactions by date
-    final groupedTransactions = <String, List<TransactionModel>>{};
-    for (final transaction in transactions) {
-      final dateKey = DateFormat('yyyy-MM-dd').format(transaction.transactionDate);
-      groupedTransactions.putIfAbsent(dateKey, () => []).add(transaction);
+    // Use cached grouped transactions if the transaction list hasn't changed
+    if (_cachedTransactions != transactions) {
+      _cachedTransactions = transactions;
+
+      // Group transactions by date
+      final groupedTransactions = <String, List<TransactionModel>>{};
+      for (final transaction in transactions) {
+        final dateKey = DateFormat('yyyy-MM-dd').format(transaction.transactionDate);
+        groupedTransactions.putIfAbsent(dateKey, () => []).add(transaction);
+      }
+
+      _cachedGroupedTransactions = groupedTransactions;
+      _cachedSortedDates = groupedTransactions.keys.toList()
+        ..sort((a, b) => b.compareTo(a)); // Descending order
     }
 
-    final sortedDates = groupedTransactions.keys.toList()
-      ..sort((a, b) => b.compareTo(a)); // Descending order
+    final transactionState = ref.watch(transactionProvider);
+    final isLoadingMore = transactionState.isLoadingMore;
+    final hasMore = transactionState.hasMore;
 
     return ListView.builder(
+      controller: _scrollController,
       padding: const EdgeInsets.only(
         left: 16,
         right: 16,
         top: 16,
         bottom: 100, // Space for FAB
       ),
-      itemCount: sortedDates.length,
+      itemCount: _cachedSortedDates!.length + (isLoadingMore || hasMore ? 1 : 0),
       itemBuilder: (context, index) {
-        final dateKey = sortedDates[index];
-        final dateTransactions = groupedTransactions[dateKey]!;
+        // Show loading indicator at the end
+        if (index >= _cachedSortedDates!.length) {
+          if (isLoadingMore) {
+            return const Padding(
+              padding: EdgeInsets.all(16.0),
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          } else if (hasMore) {
+            return const SizedBox(height: 50); // Spacer to trigger load
+          }
+          return const SizedBox.shrink();
+        }
+
+        final dateKey = _cachedSortedDates![index];
+        final dateTransactions = _cachedGroupedTransactions![dateKey]!;
         final date = DateTime.parse(dateKey);
 
         return _buildDateGroup(date, dateTransactions);
@@ -1175,190 +1251,35 @@ class _TransactionListScreenState extends ConsumerState<TransactionListScreen> {
   }
 
   Widget _buildTransactionCard(TransactionModel transaction) {
-    final isIncome = transaction.type == TransactionType.income;
-    final color = isIncome ? AppColors.success : AppColors.error;
-    final timeFormat = DateFormat('h:mm a');
     final transactionState = ref.watch(transactionProvider);
     final isSelected = transactionState.selectedTransactionIds.contains(transaction.id);
 
-    return Dismissible(
-      key: Key(transaction.id),
-      direction: (_isSelectionMode || transaction.isLocked)
-          ? DismissDirection.none
-          : DismissDirection.endToStart,
-      background: Container(
-        margin: const EdgeInsets.only(bottom: 8),
-        decoration: BoxDecoration(
-          color: AppColors.error,
-          borderRadius: BorderRadius.circular(12),
-        ),
-        alignment: Alignment.centerRight,
-        padding: const EdgeInsets.only(right: 20),
-        child: const Icon(Icons.delete, color: Colors.white),
-      ),
-      confirmDismiss: (direction) async {
-        await _deleteTransaction(transaction);
-        return false; // We handle deletion manually
-      },
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 8),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: isSelected ? AppColors.primary : Colors.grey[200]!,
-            width: isSelected ? 2 : 1,
-          ),
-        ),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            borderRadius: BorderRadius.circular(12),
-            onTap: _isSelectionMode
-                ? () => _toggleSelection(transaction.id)
-                : () async {
-                    await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => TransactionDetailScreen(
-                          transaction: transaction,
-                        ),
-                      ),
-                    );
-                  },
-            onLongPress: transaction.isLocked
-                ? null
-                : () {
-                    if (!_isSelectionMode) {
-                      _enterSelectionMode();
-                      _toggleSelection(transaction.id);
-                    }
-                  },
-            child: Stack(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Row(
-                    children: [
-                  // Selection checkbox
-                  if (_isSelectionMode)
-                    Container(
-                      margin: const EdgeInsets.only(right: 12),
-                      child: Checkbox(
-                        value: isSelected,
-                        onChanged: (_) => _toggleSelection(transaction.id),
-                        shape: const CircleBorder(),
-                      ),
-                    ),
-                  // Category icon
-                  Container(
-                    width: 48,
-                    height: 48,
-                    decoration: BoxDecoration(
-                      color: color.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Center(
-                      child: Text(
-                        transaction.categoryIcon ?? '📝',
-                        style: const TextStyle(fontSize: 24),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  // Transaction details
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          transaction.categoryName ?? 'Unknown',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.textPrimary,
-                          ),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 1,
-                        ),
-                        const SizedBox(height: 4),
-                        Row(
-                          children: [
-                            Flexible(
-                              child: Text(
-                                transaction.accountName ?? 'Unknown Account',
-                                style: TextStyle(
-                                  fontSize: 13,
-                                  color: Colors.grey[600],
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                            if (transaction.description != null) ...[
-                              Text(
-                                ' • ',
-                                style: TextStyle(color: Colors.grey[400]),
-                              ),
-                              Flexible(
-                                child: Text(
-                                  transaction.description!,
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    color: Colors.grey[600],
-                                  ),
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ],
-                          ],
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          timeFormat.format(transaction.transactionDate),
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: Colors.grey[500],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  // Amount
-                  Text(
-                    '${isIncome ? '+' : '-'}₹${transaction.amount.toStringAsFixed(2)}',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: color,
-                    ),
-                  ),
-                    ],
+    return TransactionCard(
+      transaction: transaction,
+      isSelectionMode: _isSelectionMode,
+      isSelected: isSelected,
+      onTap: _isSelectionMode
+          ? () => _toggleSelection(transaction.id)
+          : () async {
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TransactionDetailScreen(
+                    transaction: transaction,
                   ),
                 ),
-                // Lock icon in top right corner
-                if (transaction.isLocked)
-                  Positioned(
-                    top: 8,
-                    right: 8,
-                    child: Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        color: Colors.orange[100],
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Icon(
-                        Icons.lock,
-                        size: 14,
-                        color: Colors.orange[700],
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        ),
-      ),
+              );
+            },
+      onLongPress: transaction.isLocked
+          ? null
+          : () {
+              if (!_isSelectionMode) {
+                _enterSelectionMode();
+                _toggleSelection(transaction.id);
+              }
+            },
+      onDelete: () => _deleteTransaction(transaction),
+      onToggleSelection: () => _toggleSelection(transaction.id),
     );
   }
 }

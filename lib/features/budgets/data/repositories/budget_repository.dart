@@ -13,23 +13,7 @@ class BudgetRepository {
   /// Get all budgets for a profile
   Future<Result<List<BudgetModel>>> getBudgets(String profileId) async {
     try {
-      print('🔍 Querying budgets for profile: $profileId');
-
-      // First, let's check ALL budgets for this profile (without is_active filter)
-      final allResponse = await _supabase
-          .from(ApiConstants.budgetsTable)
-          .select()
-          .eq('profile_id', profileId)
-          .order('created_at', ascending: false);
-
-      print('🔍 Total budgets in DB for this profile: ${(allResponse as List).length}');
-      if ((allResponse as List).isNotEmpty) {
-        for (final budget in allResponse) {
-          print('  - Budget: category=${budget['category_id']}, amount=${budget['amount']}, is_active=${budget['is_active']}');
-        }
-      }
-
-      // Now filter by is_active
+      // Optimized: Single query with composite index on (profile_id, is_active)
       final response = await _supabase
           .from(ApiConstants.budgetsTable)
           .select()
@@ -37,18 +21,14 @@ class BudgetRepository {
           .eq('is_active', true)
           .order('created_at', ascending: false);
 
-      print('🔍 Active budgets: ${(response as List).length}');
-
       final budgets = (response as List)
           .map((json) => BudgetModel.fromJson(json))
           .toList();
 
       return Success(budgets);
     } on PostgrestException catch (e) {
-      print('❌ PostgrestException: ${e.message}');
       return Failure(DatabaseException(e.message));
     } catch (e) {
-      print('❌ Exception: $e');
       return Failure(DatabaseException('Failed to load budgets: $e'));
     }
   }
@@ -195,7 +175,48 @@ class BudgetRepository {
   }
 
   /// Get spent amount for category in current period
+  /// Optimized to use database SUM() instead of client-side calculation
   Future<Result<double>> getCategorySpending({
+    required String profileId,
+    required String categoryId,
+    required BudgetPeriod period,
+    DateTime? startDate,
+  }) async {
+    try {
+      final now = DateTime.now();
+      final periodStart = _getPeriodStart(period, startDate ?? now);
+      final periodEnd = _getPeriodEnd(period, periodStart);
+
+      // Use PostgreSQL RPC function for aggregation (more efficient)
+      // If RPC is not available, we'll use the old method but with optimization
+      final response = await _supabase
+          .rpc('get_category_spending', params: {
+            'p_profile_id': profileId,
+            'p_category_id': categoryId,
+            'p_start_date': periodStart.toIso8601String(),
+            'p_end_date': periodEnd.toIso8601String(),
+          });
+
+      final total = (response as num?)?.toDouble() ?? 0.0;
+      return Success(total);
+    } on PostgrestException catch (e) {
+      // Fallback to client-side sum if RPC function doesn't exist
+      if (e.code == '42883') {
+        return _getCategorySpendingFallback(
+          profileId: profileId,
+          categoryId: categoryId,
+          period: period,
+          startDate: startDate,
+        );
+      }
+      return Failure(DatabaseException(e.message));
+    } catch (e) {
+      return Failure(DatabaseException('Failed to calculate spending: $e'));
+    }
+  }
+
+  /// Fallback method using client-side sum (used if RPC function is not available)
+  Future<Result<double>> _getCategorySpendingFallback({
     required String profileId,
     required String categoryId,
     required BudgetPeriod period,

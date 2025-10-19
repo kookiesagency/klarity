@@ -18,13 +18,16 @@ class SupabaseConfig {
   }
 
   /// Initialize Supabase
+  /// Simple initialization like PlasticMart - let Supabase handle everything!
   static Future<void> initialize() async {
     await Supabase.initialize(
       url: ApiConstants.supabaseUrl,
       anonKey: ApiConstants.supabaseAnonKey,
+      // ⭐ Use defaults - Supabase handles auto-refresh and persistence automatically!
     );
 
     _client = Supabase.instance.client;
+    print('✅ Supabase client initialized');
   }
 
   /// Get auth instance
@@ -56,6 +59,59 @@ class SupabaseConfig {
   /// Sign out
   static Future<void> signOut() async {
     await auth.signOut();
+  }
+
+  /// Check if session is valid and refresh if needed
+  static Future<bool> ensureValidSession() async {
+    try {
+      final session = auth.currentSession;
+      if (session == null) {
+        print('ℹ️ No active session');
+        return false;
+      }
+
+      // Check if token is about to expire (within 5 minutes)
+      final expiresAt = session.expiresAt;
+      if (expiresAt != null) {
+        final now = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+        final timeUntilExpiry = expiresAt - now;
+
+        if (timeUntilExpiry < 300) {
+          // Less than 5 minutes, try to refresh
+          print('⏰ Token expiring soon, refreshing...');
+          try {
+            final response = await auth.refreshSession();
+            if (response.session != null) {
+              print('✅ Token refreshed successfully');
+              return true;
+            }
+          } catch (e) {
+            print('❌ Token refresh failed: $e');
+            // If refresh fails, sign out to clear corrupted session
+            await signOut();
+            return false;
+          }
+        }
+      }
+
+      return true;
+    } catch (e) {
+      print('❌ Session check failed: $e');
+      return false;
+    }
+  }
+
+  /// Force clear all session data (use when corrupted)
+  static Future<void> clearCorruptedSession() async {
+    try {
+      print('🔥 Clearing corrupted session...');
+      await auth.signOut();
+      // Also clear any local storage
+      await Supabase.instance.dispose();
+      print('✅ Session cleared');
+    } catch (e) {
+      print('⚠️ Error clearing session: $e');
+    }
   }
 
   /// Dispose (for cleanup)

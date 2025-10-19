@@ -8,18 +8,31 @@ class AppConfig {
   AppConfig._();
 
   /// Initialize the application
+  /// Optimized with parallel initialization for faster startup
   static Future<void> initialize() async {
     try {
+      final stopwatch = Stopwatch()..start();
+      if (kDebugMode) print('🚀 Starting app initialization...');
+
       // Ensure Flutter is initialized
       WidgetsFlutterBinding.ensureInitialized();
 
-      // Set preferred orientations (portrait only)
-      await SystemChrome.setPreferredOrientations([
-        DeviceOrientation.portraitUp,
-        DeviceOrientation.portraitDown,
-      ]);
+      // Parallelize independent initialization tasks for faster startup
+      if (kDebugMode) print('⏳ Initializing Supabase...');
+      await Future.wait([
+        // Critical: Supabase initialization (needed for auth)
+        SupabaseConfig.initialize(),
 
-      // Set system UI overlay style
+        // Non-blocking: System preferences (can run in parallel)
+        SystemChrome.setPreferredOrientations([
+          DeviceOrientation.portraitUp,
+          DeviceOrientation.portraitDown,
+        ]),
+      ]);
+      if (kDebugMode) print('✅ Supabase initialized in ${stopwatch.elapsedMilliseconds}ms');
+
+      // Non-critical: Set system UI overlay style (doesn't need await)
+      // This is a visual preference and doesn't block app functionality
       SystemChrome.setSystemUIOverlayStyle(
         const SystemUiOverlayStyle(
           statusBarColor: Colors.transparent,
@@ -28,11 +41,9 @@ class AppConfig {
         ),
       );
 
-      // Initialize Supabase
-      await SupabaseConfig.initialize();
-
+      stopwatch.stop();
       if (kDebugMode) {
-        print('✅ App initialized successfully');
+        print('✅ App initialized successfully in ${stopwatch.elapsedMilliseconds}ms');
       }
     } catch (e, stackTrace) {
       if (kDebugMode) {

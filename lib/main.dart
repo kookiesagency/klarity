@@ -14,8 +14,18 @@ import 'features/auth/presentation/providers/app_lifecycle_provider.dart';
 import 'features/auth/domain/models/auth_state.dart';
 
 void main() async {
+  final stopwatch = Stopwatch()..start();
+
   // Initialize app configuration
   await AppConfig.initialize();
+
+  // Ensure minimum splash time for smooth UX (prevents flash)
+  final elapsed = stopwatch.elapsedMilliseconds;
+  if (elapsed < 500) {
+    await Future.delayed(Duration(milliseconds: 500 - elapsed));
+  }
+  stopwatch.stop();
+  print('⏱️  Total startup time: ${stopwatch.elapsedMilliseconds}ms');
 
   // Run the app with Riverpod
   runApp(

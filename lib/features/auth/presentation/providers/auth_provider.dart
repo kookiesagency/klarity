@@ -39,7 +39,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   /// Initialize auth state and listen to auth changes
   Future<void> _initializeAuth() async {
     // Listen to auth state changes (for automatic token refresh)
-    SupabaseConfig.auth.onAuthStateChange.listen((data) {
+    SupabaseConfig.auth.onAuthStateChange.listen((data) async {
       final event = data.event;
       final session = data.session;
 
@@ -47,19 +47,23 @@ class AuthNotifier extends StateNotifier<AuthState> {
         if (session?.user != null) {
           print('🔄 Auth state changed: ${event.name}');
           // Refresh user data when token is refreshed
-          _checkAuthStatus();
+          await _checkAuthStatus();
         }
       } else if (event == AuthChangeEvent.signedOut) {
         print('👋 User signed out');
         state = const Unauthenticated();
+      } else if (event == AuthChangeEvent.userUpdated) {
+        print('🔄 User data updated');
+        await _checkAuthStatus();
       }
     });
 
     // Check current session
-    _checkAuthStatus();
+    await _checkAuthStatus();
   }
 
   /// Check current authentication status
+  /// ⭐ PlasticMart-style: Simple and clean!
   Future<void> _checkAuthStatus() async {
     state = const AuthLoading();
 
@@ -70,12 +74,13 @@ class AuthNotifier extends StateNotifier<AuthState> {
           print('✅ User authenticated: ${user.email}');
           state = Authenticated(user);
         } else {
-          print('ℹ️ No user session found');
+          print('ℹ️ No active session - showing login screen');
           state = const Unauthenticated();
         }
       },
-      onFailure: (exception) async {
+      onFailure: (exception) {
         print('⚠️ Session check failed: ${exception.message}');
+        // On any error, go to unauthenticated (login screen)
         state = const Unauthenticated();
       },
     );

@@ -156,23 +156,19 @@ class AuthRepository {
   }
 
   /// Get current user
+  /// ⭐ PlasticMart-style: Trust Supabase session completely!
   Future<Result<UserModel?>> getCurrentUser() async {
     try {
       final authUser = _supabase.auth.currentUser;
 
-      // If no Supabase session, check if we have cached user data
+      // ⭐ KEY FIX: If no Supabase session, DON'T use cache - force fresh login!
       if (authUser == null) {
-        // Check if user was previously logged in
-        final cachedUser = await _getCachedUserData();
-        if (cachedUser != null) {
-          // User has cached data, allow them to authenticate with PIN
-          print('📱 Supabase session expired, returning cached user data for PIN authentication');
-          return Success(cachedUser);
-        }
+        print('ℹ️ No Supabase session - clearing cache and requiring login');
+        await _clearCachedUserData();
         return const Success(null);
       }
 
-      // Try to fetch fresh user data from database
+      // ✅ Supabase session is valid - fetch fresh user data
       try {
         final userData = await _supabase
             .from(ApiConstants.usersTable)
@@ -182,31 +178,42 @@ class AuthRepository {
 
         final user = UserModel.fromJson(userData);
 
-        // Update cached data with fresh data
+        // Update cache with fresh data (for offline fallback only)
         await _cacheUserData(user);
 
         return Success(user);
       } catch (e) {
-        // If database fetch fails (e.g., due to auth issues), return cached data
-        print('⚠️ Failed to fetch user data from database: $e');
+        final errorMessage = e.toString();
+
+        // Check if this is auth/token error - force logout
+        if (errorMessage.contains('oauth_client_id') ||
+            errorMessage.contains('unexpected_failure') ||
+            errorMessage.contains('JWT') ||
+            errorMessage.contains('expired')) {
+          print('🔥 Auth error detected - forcing fresh login: $errorMessage');
+          // Clear everything and force login
+          try {
+            await _supabase.auth.signOut();
+            await _clearCachedUserData();
+          } catch (signOutError) {
+            print('⚠️ Error during forced sign out: $signOutError');
+          }
+          return const Success(null);
+        }
+
+        // ⭐ For network/database errors ONLY (and session is valid), use cache as fallback
+        print('⚠️ Database fetch failed, using cache as fallback: $e');
         final cachedUser = await _getCachedUserData();
         if (cachedUser != null && cachedUser.id == authUser.id) {
-          print('📱 Returning cached user data due to database fetch failure');
+          print('📱 Returning cached user data (Supabase session is still valid)');
           return Success(cachedUser);
         }
-        rethrow;
+
+        // No cache available, return error
+        return Failure(ErrorHandler.handle(e));
       }
     } catch (e, stackTrace) {
-      // Last resort: try to return cached data
-      try {
-        final cachedUser = await _getCachedUserData();
-        if (cachedUser != null) {
-          print('📱 Returning cached user data due to error: $e');
-          return Success(cachedUser);
-        }
-      } catch (_) {
-        // Ignore cache read errors
-      }
+      print('❌ Unexpected error in getCurrentUser: $e');
       return Failure(ErrorHandler.handle(e, stackTrace: stackTrace));
     }
   }
@@ -230,16 +237,18 @@ class AuthRepository {
   }
 
   /// Verify PIN
+  /// ⭐ Only works if Supabase session is valid!
   Future<Result<bool>> verifyPin(String userId, String pin) async {
     try {
-      // Check if we have a valid Supabase session
+      // ⭐ CRITICAL: Check if we have a valid Supabase session FIRST
       final currentUser = _supabase.auth.currentUser;
       if (currentUser == null) {
-        // Session expired - cannot verify PIN without database access
+        print('🔒 No Supabase session - cannot verify PIN, forcing login');
+        await _clearCachedUserData();
         return Failure(app_exceptions.AuthException('Session expired. Please sign in again.'));
       }
 
-      // Get user data
+      // ✅ Session valid - verify PIN from database
       final userData = await _supabase
           .from(ApiConstants.usersTable)
           .select('pin_hash')

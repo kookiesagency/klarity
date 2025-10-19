@@ -48,13 +48,20 @@ class AppLifecycleNotifier extends StateNotifier<AppLifecycleState> with Widgets
 
     switch (lifecycleState) {
       case AppLifecycleState.paused:
-      case AppLifecycleState.inactive:
-        // App went to background
+        // App went to background - only set time on paused, not inactive
+        // Inactive happens during quick transitions (notification shade, navigation)
         _backgroundTime = DateTime.now();
+        print('📱 App paused at ${_backgroundTime}');
+        break;
+
+      case AppLifecycleState.inactive:
+        // App is inactive (quick transition) - don't set background time
+        print('📱 App inactive (quick transition)');
         break;
 
       case AppLifecycleState.resumed:
         // App came back to foreground
+        print('📱 App resumed');
         _checkAutoLock();
         break;
 
@@ -70,7 +77,17 @@ class AppLifecycleNotifier extends StateNotifier<AppLifecycleState> with Widgets
     final now = DateTime.now();
     final elapsed = now.difference(_backgroundTime!);
 
-    // If Duration.zero, lock immediately. Otherwise check if elapsed time exceeds duration
+    // IMPORTANT: Don't lock if background time is less than 1 second
+    // This prevents locking during quick navigation or system UI interactions
+    const minBackgroundTime = Duration(seconds: 1);
+
+    if (elapsed < minBackgroundTime) {
+      print('⏱️ App unlocked - only ${elapsed.inMilliseconds}ms elapsed (too short for lock)');
+      _backgroundTime = null;
+      return;
+    }
+
+    // If Duration.zero, lock immediately (but only if > 1s). Otherwise check if elapsed time exceeds duration
     if (_autoLockDuration == Duration.zero || elapsed >= _autoLockDuration) {
       _ref.read(pinVerificationProvider.notifier).setPinVerified(false);
       print('🔒 App locked after ${elapsed.inSeconds}s - PIN/biometric required');
