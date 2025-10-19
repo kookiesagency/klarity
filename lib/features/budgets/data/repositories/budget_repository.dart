@@ -125,6 +125,7 @@ class BudgetRepository {
   Future<Result<BudgetModel>> updateBudget({
     required String budgetId,
     double? amount,
+    BudgetPeriod? period,
     DateTime? startDate,
     DateTime? endDate,
     int? alertThreshold,
@@ -133,6 +134,7 @@ class BudgetRepository {
     try {
       final updateData = <String, dynamic>{};
       if (amount != null) updateData['amount'] = amount;
+      if (period != null) updateData['period'] = period.value;
       if (startDate != null) updateData['start_date'] = startDate.toIso8601String().split('T')[0];
       if (endDate != null) updateData['end_date'] = endDate.toIso8601String().split('T')[0];
       if (alertThreshold != null) updateData['alert_threshold'] = alertThreshold;

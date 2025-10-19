@@ -415,6 +415,10 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          _buildSectionHeader('Budget vs Actual'),
+          const SizedBox(height: 16),
+          _buildBudgetVsActualChart(),
+          const SizedBox(height: 32),
           _buildSectionHeader('Budget Overview'),
           const SizedBox(height: 16),
           _buildBudgetOverview(),
@@ -1332,6 +1336,334 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
             style: TextStyle(color: AppColors.error),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildBudgetVsActualChart() {
+    final budgetState = ref.watch(budgetProvider);
+    final categoryState = ref.watch(categoryProvider);
+
+    // Show loading state
+    if (budgetState.isLoading || categoryState.isLoading) {
+      return Container(
+        height: 300,
+        padding: const EdgeInsets.all(32),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 10,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: const Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    // Show empty state if no budgets
+    if (budgetState.budgets.isEmpty) {
+      return Container(
+        height: 300,
+        padding: const EdgeInsets.all(32),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 10,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: const Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                Icons.bar_chart,
+                size: 64,
+                color: AppColors.textSecondary,
+              ),
+              SizedBox(height: 16),
+              Text(
+                'No Budget Data',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+              SizedBox(height: 8),
+              Text(
+                'Set budgets to see the comparison',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: AppColors.textSecondary,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    // Get budget data with actual spending
+    final budgetData = budgetState.budgetStatuses.entries.take(5).map((entry) {
+      final categoryId = entry.key;
+      final status = entry.value;
+      final category = categoryState.categories.firstWhere(
+        (c) => c.id == categoryId,
+        orElse: () => categoryState.categories.first,
+      );
+
+      return {
+        'category': category,
+        'budgeted': status.budget.amount,
+        'actual': status.spent,
+        'status': status,
+      };
+    }).toList();
+
+    if (budgetData.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    // Find max value for chart scaling
+    final maxValue = budgetData.fold<double>(0, (max, data) {
+      final budgeted = data['budgeted'] as double;
+      final actual = data['actual'] as double;
+      return [max, budgeted, actual].reduce((a, b) => a > b ? a : b);
+    });
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Top 5 Categories',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+              color: AppColors.textSecondary,
+            ),
+          ),
+          const SizedBox(height: 16),
+          SizedBox(
+            height: 250,
+            child: BarChart(
+              BarChartData(
+                alignment: BarChartAlignment.spaceAround,
+                maxY: maxValue * 1.2, // Add 20% padding
+                barTouchData: BarTouchData(
+                  enabled: true,
+                  touchTooltipData: BarTouchTooltipData(
+                    getTooltipColor: (group) => Colors.grey[800]!,
+                    tooltipPadding: const EdgeInsets.all(8),
+                    tooltipMargin: 8,
+                    getTooltipItem: (group, groupIndex, rod, rodIndex) {
+                      final data = budgetData[groupIndex];
+                      final category = data['category'] as dynamic;
+                      final isBudgeted = rodIndex == 0;
+                      final value = isBudgeted
+                          ? data['budgeted'] as double
+                          : data['actual'] as double;
+
+                      return BarTooltipItem(
+                        '${category.name}\n',
+                        const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12,
+                        ),
+                        children: [
+                          TextSpan(
+                            text: '${isBudgeted ? "Budget" : "Actual"}: ₹${value.toStringAsFixed(0)}',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 11,
+                              fontWeight: FontWeight.normal,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+                titlesData: FlTitlesData(
+                  show: true,
+                  bottomTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      getTitlesWidget: (value, meta) {
+                        if (value.toInt() >= budgetData.length) {
+                          return const Text('');
+                        }
+                        final data = budgetData[value.toInt()];
+                        final category = data['category'] as dynamic;
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Text(
+                            category.icon ?? '📁',
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                        );
+                      },
+                      reservedSize: 30,
+                    ),
+                  ),
+                  leftTitles: AxisTitles(
+                    sideTitles: SideTitles(
+                      showTitles: true,
+                      reservedSize: 50,
+                      getTitlesWidget: (value, meta) {
+                        if (value == 0) return const Text('₹0');
+                        if (value >= 1000) {
+                          return Text(
+                            '₹${(value / 1000).toStringAsFixed(0)}k',
+                            style: const TextStyle(
+                              fontSize: 10,
+                              color: AppColors.textSecondary,
+                            ),
+                          );
+                        }
+                        return Text(
+                          '₹${value.toStringAsFixed(0)}',
+                          style: const TextStyle(
+                            fontSize: 10,
+                            color: AppColors.textSecondary,
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  topTitles: const AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  rightTitles: const AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                ),
+                gridData: FlGridData(
+                  show: true,
+                  drawVerticalLine: false,
+                  horizontalInterval: maxValue / 5,
+                  getDrawingHorizontalLine: (value) {
+                    return FlLine(
+                      color: Colors.grey[200]!,
+                      strokeWidth: 1,
+                    );
+                  },
+                ),
+                borderData: FlBorderData(
+                  show: false,
+                ),
+                barGroups: budgetData.asMap().entries.map((entry) {
+                  final index = entry.key;
+                  final data = entry.value;
+                  final budgeted = data['budgeted'] as double;
+                  final actual = data['actual'] as double;
+                  final status = data['status'] as BudgetStatus;
+
+                  // Determine actual bar color based on budget status
+                  Color actualColor;
+                  if (status.alertLevel == BudgetAlertLevel.overBudget) {
+                    actualColor = AppColors.error;
+                  } else if (status.alertLevel == BudgetAlertLevel.critical) {
+                    actualColor = Colors.deepOrange;
+                  } else if (status.alertLevel == BudgetAlertLevel.warning) {
+                    actualColor = Colors.orange;
+                  } else {
+                    actualColor = AppColors.success;
+                  }
+
+                  return BarChartGroupData(
+                    x: index,
+                    barRods: [
+                      // Budget bar (blue)
+                      BarChartRodData(
+                        toY: budgeted,
+                        color: AppColors.primary.withOpacity(0.7),
+                        width: 12,
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(4),
+                          topRight: Radius.circular(4),
+                        ),
+                      ),
+                      // Actual bar (color-coded)
+                      BarChartRodData(
+                        toY: actual,
+                        color: actualColor,
+                        width: 12,
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(4),
+                          topRight: Radius.circular(4),
+                        ),
+                      ),
+                    ],
+                  );
+                }).toList(),
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          // Legend
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 12,
+                height: 12,
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withOpacity(0.7),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const SizedBox(width: 4),
+              const Text(
+                'Budget',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: AppColors.textSecondary,
+                ),
+              ),
+              const SizedBox(width: 16),
+              Container(
+                width: 12,
+                height: 12,
+                decoration: BoxDecoration(
+                  color: AppColors.success,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const SizedBox(width: 4),
+              const Text(
+                'Actual',
+                style: TextStyle(
+                  fontSize: 12,
+                  color: AppColors.textSecondary,
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
