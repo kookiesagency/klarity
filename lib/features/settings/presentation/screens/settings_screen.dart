@@ -25,6 +25,7 @@ class SettingsScreen extends ConsumerStatefulWidget {
 
 class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   bool _isEnablingBiometric = false;
+  bool _isTogglingTheme = false;
 
   @override
   void initState() {
@@ -66,6 +67,18 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         context.showErrorSnackBar(exception.message);
       },
     );
+  }
+
+  Future<void> _toggleDarkMode(bool value) async {
+    setState(() => _isTogglingTheme = true);
+
+    await ref.read(themeProvider.notifier).setThemeMode(
+          value ? AppThemeMode.dark : AppThemeMode.light,
+        );
+
+    if (mounted) {
+      setState(() => _isTogglingTheme = false);
+    }
   }
 
   Future<void> _handleSignOut() async {
@@ -140,15 +153,17 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
     final isDarkMode = themeNotifier.isDarkMode;
     final isBiometricAvailableFuture = ref.watch(isBiometricAvailableProvider);
 
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: isDarkTheme ? AppColors.darkBackground : Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: isDarkTheme ? AppColors.darkBackground : Colors.white,
         elevation: 0,
-        title: const Text(
+        title: Text(
           'Settings',
           style: TextStyle(
-            color: AppColors.textPrimary,
+            color: isDarkTheme ? AppColors.darkTextPrimary : AppColors.textPrimary,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
@@ -165,7 +180,9 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   Container(
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: AppColors.lightPrimary.withOpacity(0.1),
+                      color: isDarkTheme
+                          ? AppColors.darkSurface
+                          : AppColors.lightPrimary.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(16),
                     ),
                     child: Row(
@@ -197,18 +214,22 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                             children: [
                               Text(
                                 user.fullName,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
-                                  color: AppColors.textPrimary,
+                                  color: isDarkTheme
+                                      ? AppColors.darkTextPrimary
+                                      : AppColors.textPrimary,
                                 ),
                               ),
                               const SizedBox(height: 4),
                               Text(
                                 user.email,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 14,
-                                  color: AppColors.textSecondary,
+                                  color: isDarkTheme
+                                      ? AppColors.darkTextSecondary
+                                      : AppColors.textSecondary,
                                 ),
                               ),
                             ],
@@ -220,12 +241,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   const SizedBox(height: 32),
 
                   // Security Section
-                  const Text(
+                  Text(
                     'Security',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
+                      color: isDarkTheme
+                          ? AppColors.darkTextPrimary
+                          : AppColors.textPrimary,
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -288,12 +311,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   const SizedBox(height: 32),
 
                   // Appearance Section
-                  const Text(
+                  Text(
                     'Appearance',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
+                      color: isDarkTheme
+                          ? AppColors.darkTextPrimary
+                          : AppColors.textPrimary,
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -303,26 +328,30 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     icon: Icons.dark_mode_outlined,
                     title: 'Dark Mode',
                     subtitle: isDarkMode ? 'Enabled' : 'Disabled',
-                    trailing: Switch(
-                      value: isDarkMode,
-                      onChanged: (value) {
-                        ref.read(themeProvider.notifier).setThemeMode(
-                              value ? AppThemeMode.dark : AppThemeMode.light,
-                            );
-                      },
-                      activeColor: AppColors.lightPrimary,
-                    ),
+                    trailing: _isTogglingTheme
+                        ? const SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                        : Switch(
+                            value: isDarkMode,
+                            onChanged: _toggleDarkMode,
+                            activeColor: AppColors.lightPrimary,
+                          ),
                   ),
 
                   const SizedBox(height: 32),
 
                   // Profiles Section
-                  const Text(
+                  Text(
                     'Profiles',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
+                      color: isDarkTheme
+                          ? AppColors.darkTextPrimary
+                          : AppColors.textPrimary,
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -477,12 +506,14 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   const SizedBox(height: 32),
 
                   // Account Section
-                  const Text(
+                  Text(
                     'Account',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
+                      color: isDarkTheme
+                          ? AppColors.darkTextPrimary
+                          : AppColors.textPrimary,
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -526,13 +557,15 @@ class _SettingsTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
+
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.grey[50],
+          color: isDarkTheme ? AppColors.darkSurface : Colors.grey[50],
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
@@ -559,15 +592,20 @@ class _SettingsTile extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: titleColor ?? AppColors.textPrimary,
+                      color: titleColor ??
+                          (isDarkTheme
+                              ? AppColors.darkTextPrimary
+                              : AppColors.textPrimary),
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     subtitle,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 13,
-                      color: AppColors.textSecondary,
+                      color: isDarkTheme
+                          ? AppColors.darkTextSecondary
+                          : AppColors.textSecondary,
                     ),
                   ),
                 ],

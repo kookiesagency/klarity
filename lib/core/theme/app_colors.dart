@@ -51,10 +51,15 @@ class AppColors {
   static const Color lightOnSurface = Color(0xFF343434);
   static const Color lightOnError = Color(0xFFFFFFFF);
 
-  // Text Colors (using neutral scale)
+  // Text Colors (Light Mode)
   static const Color textPrimary = Color(0xFF343434);
   static const Color textSecondary = Color(0xFF898989);
   static const Color textTertiary = Color(0xFF989898);
+
+  // Text Colors (Dark Mode)
+  static const Color darkTextPrimary = Color(0xFFE5E5E5);
+  static const Color darkTextSecondary = Color(0xFFB0B0B0);
+  static const Color darkTextTertiary = Color(0xFF808080);
 
   // Chart Colors - Soft Pastels from the design
   static const List<Color> chartColors = [
