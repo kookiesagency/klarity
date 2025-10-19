@@ -221,6 +221,13 @@ class AuthRepository {
   /// Set up PIN
   Future<Result<void>> setupPin(String userId, String pin) async {
     try {
+      // Check if we have a valid Supabase session first
+      final currentUser = _supabase.auth.currentUser;
+      if (currentUser == null) {
+        print('🔒 No Supabase session - cannot set up PIN');
+        return Failure(app_exceptions.AuthException('Session expired. Please sign in again.'));
+      }
+
       // Hash the PIN
       final pinHash = _hashPin(pin);
 
@@ -232,6 +239,15 @@ class AuthRepository {
 
       return const Success(null);
     } catch (e, stackTrace) {
+      // Check for session/auth errors
+      final errorMessage = e.toString();
+      if (errorMessage.contains('oauth_client_id') ||
+          errorMessage.contains('unexpected_failure') ||
+          errorMessage.contains('JWT') ||
+          errorMessage.contains('expired')) {
+        print('🔥 Auth error in setupPin: $errorMessage');
+        return Failure(app_exceptions.AuthException('Session expired. Please sign in again.'));
+      }
       return Failure(ErrorHandler.handle(e, stackTrace: stackTrace));
     }
   }
@@ -281,6 +297,13 @@ class AuthRepository {
   /// Enable biometric authentication
   Future<Result<void>> enableBiometric(String userId) async {
     try {
+      // Check if we have a valid Supabase session first
+      final currentUser = _supabase.auth.currentUser;
+      if (currentUser == null) {
+        print('🔒 No Supabase session - cannot enable biometric');
+        return Failure(app_exceptions.AuthException('Session expired. Please sign in again.'));
+      }
+
       await _supabase
           .from(ApiConstants.usersTable)
           .update({'biometric_enabled': true})
@@ -288,6 +311,15 @@ class AuthRepository {
 
       return const Success(null);
     } catch (e, stackTrace) {
+      // Check for session/auth errors
+      final errorMessage = e.toString();
+      if (errorMessage.contains('oauth_client_id') ||
+          errorMessage.contains('unexpected_failure') ||
+          errorMessage.contains('JWT') ||
+          errorMessage.contains('expired')) {
+        print('🔥 Auth error in enableBiometric: $errorMessage');
+        return Failure(app_exceptions.AuthException('Session expired. Please sign in again.'));
+      }
       return Failure(ErrorHandler.handle(e, stackTrace: stackTrace));
     }
   }
@@ -295,6 +327,13 @@ class AuthRepository {
   /// Disable biometric authentication
   Future<Result<void>> disableBiometric(String userId) async {
     try {
+      // Check if we have a valid Supabase session first
+      final currentUser = _supabase.auth.currentUser;
+      if (currentUser == null) {
+        print('🔒 No Supabase session - cannot disable biometric');
+        return Failure(app_exceptions.AuthException('Session expired. Please sign in again.'));
+      }
+
       await _supabase
           .from(ApiConstants.usersTable)
           .update({'biometric_enabled': false})
@@ -302,6 +341,15 @@ class AuthRepository {
 
       return const Success(null);
     } catch (e, stackTrace) {
+      // Check for session/auth errors
+      final errorMessage = e.toString();
+      if (errorMessage.contains('oauth_client_id') ||
+          errorMessage.contains('unexpected_failure') ||
+          errorMessage.contains('JWT') ||
+          errorMessage.contains('expired')) {
+        print('🔥 Auth error in disableBiometric: $errorMessage');
+        return Failure(app_exceptions.AuthException('Session expired. Please sign in again.'));
+      }
       return Failure(ErrorHandler.handle(e, stackTrace: stackTrace));
     }
   }
@@ -323,6 +371,13 @@ class AuthRepository {
     String? phone,
   }) async {
     try {
+      // Check if we have a valid Supabase session first
+      final currentUser = _supabase.auth.currentUser;
+      if (currentUser == null) {
+        print('🔒 No Supabase session - cannot update profile');
+        return Failure(app_exceptions.AuthException('Session expired. Please sign in again.'));
+      }
+
       final updates = <String, dynamic>{};
       if (fullName != null) updates['full_name'] = fullName;
       if (phone != null) updates['phone'] = phone;
@@ -337,6 +392,15 @@ class AuthRepository {
       final user = UserModel.fromJson(userData);
       return Success(user);
     } catch (e, stackTrace) {
+      // Check for session/auth errors
+      final errorMessage = e.toString();
+      if (errorMessage.contains('oauth_client_id') ||
+          errorMessage.contains('unexpected_failure') ||
+          errorMessage.contains('JWT') ||
+          errorMessage.contains('expired')) {
+        print('🔥 Auth error in updateProfile: $errorMessage');
+        return Failure(app_exceptions.AuthException('Session expired. Please sign in again.'));
+      }
       return Failure(ErrorHandler.handle(e, stackTrace: stackTrace));
     }
   }

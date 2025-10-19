@@ -182,9 +182,7 @@ class _CategoryDetailScreenState extends ConsumerState<CategoryDetailScreen> {
     final budgetStatus = isExpense ? budgetState.budgetStatuses[widget.category.id] : null;
 
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),

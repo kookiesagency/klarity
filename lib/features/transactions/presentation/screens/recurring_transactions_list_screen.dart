@@ -100,7 +100,7 @@ class _RecurringTransactionsListScreenState
   void _showFilterSheet() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.white,
+
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -206,9 +206,9 @@ class _RecurringTransactionsListScreenState
     }
 
     return Scaffold(
-      backgroundColor: Colors.white,
+
       appBar: AppBar(
-        backgroundColor: Colors.white,
+  
         elevation: 0,
         title: const Text(
           'Recurring Transactions',

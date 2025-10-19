@@ -107,9 +107,9 @@ class _EmiListScreenState extends ConsumerState<EmiListScreen>
     final inactiveEmis = state.emis.where((emi) => !emi.isActive).toList();
 
     return Scaffold(
-      backgroundColor: Colors.white,
+
       appBar: AppBar(
-        backgroundColor: Colors.white,
+  
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),

@@ -64,7 +64,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final activeProfile = ref.watch(activeProfileProvider);
 
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
           children: [

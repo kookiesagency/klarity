@@ -64,7 +64,13 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         );
       },
       onFailure: (exception) {
-        context.showErrorSnackBar(exception.message);
+        // Check if it's a session error
+        if (exception.message.contains('Session expired') ||
+            exception.message.contains('sign in again')) {
+          _handleForceSignOut();
+        } else {
+          context.showErrorSnackBar(exception.message);
+        }
       },
     );
   }
@@ -274,17 +280,23 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         subtitle: user.biometricEnabled
                             ? 'Enabled'
                             : 'Tap to enable',
-                        trailing: _isEnablingBiometric
-                            ? const SizedBox(
-                                width: 24,
-                                height: 24,
-                                child: CircularProgressIndicator(strokeWidth: 2),
-                              )
-                            : Switch(
-                                value: user.biometricEnabled,
-                                onChanged: _toggleBiometric,
-                                activeColor: AppColors.lightPrimary,
-                              ),
+                        trailing: SizedBox(
+                          width: 51,
+                          height: 31,
+                          child: _isEnablingBiometric
+                              ? const Center(
+                                  child: SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: CircularProgressIndicator(strokeWidth: 2),
+                                  ),
+                                )
+                              : Switch(
+                                  value: user.biometricEnabled,
+                                  onChanged: _toggleBiometric,
+                                  activeColor: AppColors.lightPrimary,
+                                ),
+                        ),
                       );
                     },
                     loading: () => _SettingsTile(
@@ -328,17 +340,23 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                     icon: Icons.dark_mode_outlined,
                     title: 'Dark Mode',
                     subtitle: isDarkMode ? 'Enabled' : 'Disabled',
-                    trailing: _isTogglingTheme
-                        ? const SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                        : Switch(
-                            value: isDarkMode,
-                            onChanged: _toggleDarkMode,
-                            activeColor: AppColors.lightPrimary,
-                          ),
+                    trailing: SizedBox(
+                      width: 51,
+                      height: 31,
+                      child: _isTogglingTheme
+                          ? const Center(
+                              child: SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(strokeWidth: 2),
+                              ),
+                            )
+                          : Switch(
+                              value: isDarkMode,
+                              onChanged: _toggleDarkMode,
+                              activeColor: AppColors.lightPrimary,
+                            ),
+                    ),
                   ),
 
                   const SizedBox(height: 32),
@@ -573,12 +591,16 @@ class _SettingsTile extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
-                color: (titleColor ?? AppColors.lightPrimary).withOpacity(0.1),
+                color: isDarkTheme
+                    ? (titleColor ?? AppColors.lightPrimary).withOpacity(0.2)
+                    : (titleColor ?? AppColors.lightPrimary).withOpacity(0.1),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(
                 icon,
-                color: titleColor ?? AppColors.lightPrimary,
+                color: isDarkTheme
+                    ? (titleColor ?? AppColors.lightPrimary.withOpacity(0.8))
+                    : (titleColor ?? AppColors.lightPrimary),
                 size: 24,
               ),
             ),

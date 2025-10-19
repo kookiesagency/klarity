@@ -219,9 +219,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
     final activeProfile = ref.watch(activeProfileProvider);
 
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: Colors.white,
         elevation: 0,
         centerTitle: true,
         title: Column(

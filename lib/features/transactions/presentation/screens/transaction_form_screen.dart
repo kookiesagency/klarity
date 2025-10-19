@@ -387,9 +387,9 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
     }
 
     return Scaffold(
-      backgroundColor: Colors.white,
+
       appBar: AppBar(
-        backgroundColor: Colors.white,
+  
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.close, color: AppColors.textPrimary),

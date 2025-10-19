@@ -296,9 +296,9 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(authProvider.notifier).currentUser;
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(24),
@@ -327,20 +327,24 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
 
               // User greeting
               if (user != null) ...[
-                const Text(
+                Text(
                   'Welcome back,',
                   style: TextStyle(
                     fontSize: 14,
-                    color: AppColors.textSecondary,
+                    color: isDarkMode
+                        ? AppColors.darkTextSecondary
+                        : AppColors.textSecondary,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
                   user.fullName,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
+                    color: isDarkMode
+                        ? AppColors.darkTextPrimary
+                        : AppColors.textPrimary,
                   ),
                   textAlign: TextAlign.center,
                 ),
@@ -350,10 +354,12 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
               // Title
               Text(
                 _isPinVerified ? 'PIN Verified!' : 'Enter Your PIN',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: isDarkMode
+                      ? AppColors.darkTextPrimary
+                      : AppColors.textPrimary,
                 ),
               ),
               const SizedBox(height: 6),
@@ -365,7 +371,11 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
                     : 'Enter your 4-digit PIN to continue',
                 style: TextStyle(
                   fontSize: 14,
-                  color: _hasError ? Colors.red : AppColors.textSecondary,
+                  color: _hasError
+                      ? Colors.red
+                      : (isDarkMode
+                          ? AppColors.darkTextSecondary
+                          : AppColors.textSecondary),
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -389,23 +399,29 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
                       width: 60,
                       height: 70,
                       decoration: BoxDecoration(
-                        color: Colors.grey[50],
+                        color: isDarkMode
+                            ? AppColors.darkSurfaceVariant
+                            : Colors.grey[50],
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
                           color: _hasError
                               ? Colors.red
                               : isActive
                                   ? AppColors.lightPrimary
-                                  : Colors.grey[300]!,
+                                  : (isDarkMode
+                                      ? AppColors.darkOnSurface.withOpacity(0.3)
+                                      : Colors.grey[300]!),
                           width: isActive ? 2 : 1.5,
                         ),
                       ),
                       child: Center(
                         child: isFilled
-                            ? const Icon(
+                            ? Icon(
                                 Icons.circle,
                                 size: 16,
-                                color: AppColors.lightPrimary,
+                                color: isDarkMode
+                                    ? AppColors.darkPrimary.withOpacity(0.8)
+                                    : AppColors.lightPrimary,
                               )
                             : null,
                       ),
