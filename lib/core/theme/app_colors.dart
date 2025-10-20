@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 class AppColors {
   AppColors._();
 
-  // PRIMARY COLORS (Purple Theme)
-  static const Color primary = Color(0xFF281C9D); // Deep Purple
-  static const Color primaryVariant1 = Color(0xFF5655B9); // Medium Purple
-  static const Color primaryVariant2 = Color(0xFFA8A3D7); // Light Purple
-  static const Color primaryVariant3 = Color(0xFFF2F1F9); // Very Light Purple
+  // PRIMARY COLORS (Sage & Tan Theme)
+  static const Color primary = Color(0xFF5D866C); // Sage Green
+  static const Color primaryVariant1 = Color(0xFF7A9D88); // Light Sage
+  static const Color primaryVariant2 = Color(0xFFC2A68C); // Medium Tan
+  static const Color primaryVariant3 = Color(0xFFE6D8C3); // Light Beige
 
   // NEUTRAL COLORS
   static const Color neutral900 = Color(0xFF343434); // Darkest
@@ -20,10 +20,10 @@ class AppColors {
 
   // SEMANTIC COLORS
   static const Color error = Color(0xFFFF4267); // Red
-  static const Color info = Color(0xFF0890FE); // Blue
+  static const Color info = Color(0xFF7A9D88); // Light sage
   static const Color warning = Color(0xFFFFAF2A); // Orange
-  static const Color success = Color(0xFF52D5BA); // Teal
-  static const Color accent = Color(0xFFFB6B18); // Orange accent
+  static const Color success = Color(0xFF5D866C); // Sage green
+  static const Color accent = Color(0xFFC2A68C); // Tan accent
 
   // Dark Mode Colors
   static const Color darkPrimary = Color(0xFF281C9D);
@@ -39,11 +39,11 @@ class AppColors {
   static const Color darkOnError = Color(0xFFFFFFFF);
 
   // Light Mode Colors
-  static const Color lightPrimary = Color(0xFF281C9D); // Purple primary
-  static const Color lightSecondary = Color(0xFF52D5BA); // Teal accent
-  static const Color lightBackground = Color(0xFFF5F7FA); // Light grayish background
+  static const Color lightPrimary = Color(0xFF5D866C); // Sage green primary
+  static const Color lightSecondary = Color(0xFFC2A68C); // Medium tan accent
+  static const Color lightBackground = Color(0xFFF5F5F0); // Light grayish white
   static const Color lightSurface = Color(0xFFFFFFFF); // Pure white for cards
-  static const Color lightSurfaceVariant = Color(0xFFF2F1F9); // Very light purple
+  static const Color lightSurfaceVariant = Color(0xFFE6D8C3); // Light beige
   static const Color lightError = Color(0xFFFF4267);
   static const Color lightOnPrimary = Color(0xFFFFFFFF);
   static const Color lightOnSecondary = Color(0xFF000000);
@@ -61,25 +61,25 @@ class AppColors {
   static const Color darkTextSecondary = Color(0xFFB0B0B0);
   static const Color darkTextTertiary = Color(0xFF808080);
 
-  // Chart Colors - Soft Pastels from the design
+  // Chart Colors - Warm Natural Tones
   static const List<Color> chartColors = [
-    Color(0xFFFFB59A), // Peach - 12%
-    Color(0xFFB5D5F5), // Light Blue - 3%
-    Color(0xFFFFF5BA), // Light Yellow - 5%
-    Color(0xFFAFECC7), // Light Green - 32%
-    Color(0xFFCDB4F0), // Light Purple - 21%
-    Color(0xFF9FE6E1), // Light Teal - 7%
-    Color(0xFFFFACC2), // Light Pink - 13%
-    Color(0xFFFED8A8), // Light Beige - 5%
+    Color(0xFF5D866C), // Sage Green
+    Color(0xFFC2A68C), // Medium Tan
+    Color(0xFF7A9D88), // Light Sage
+    Color(0xFFE6D8C3), // Light Beige
+    Color(0xFFD4B896), // Warm Beige
+    Color(0xFF8BAA97), // Soft Sage
+    Color(0xFFB8967D), // Terra Cotta
+    Color(0xFF9FB8A8), // Pale Sage
   ];
 
-  // Category Background Colors (lighter variants for icons)
-  static const Color categoryGreen = Color(0xFFE8F5E9);
-  static const Color categoryPurple = Color(0xFFF3E5F5);
-  static const Color categoryPink = Color(0xFFFCE4EC);
-  static const Color categoryOrange = Color(0xFFFFF3E0);
-  static const Color categoryBlue = Color(0xFFE3F2FD);
-  static const Color categoryTeal = Color(0xFFE0F2F1);
-  static const Color categoryYellow = Color(0xFFFFFDE7);
-  static const Color categoryRed = Color(0xFFFFEBEE);
+  // Category Background Colors (warm, natural tones)
+  static const Color categoryGreen = Color(0xFFE8F0EC); // Soft sage
+  static const Color categoryPurple = Color(0xFFE6D8C3); // Light beige
+  static const Color categoryPink = Color(0xFFF5E8DD); // Warm pink
+  static const Color categoryOrange = Color(0xFFFFEBDB); // Warm orange
+  static const Color categoryBlue = Color(0xFFDCE8E4); // Soft blue-green
+  static const Color categoryTeal = Color(0xFFD4E3DE); // Muted teal
+  static const Color categoryYellow = Color(0xFFFFF8E5); // Soft yellow
+  static const Color categoryRed = Color(0xFFFFE5E5); // Soft red
 }
