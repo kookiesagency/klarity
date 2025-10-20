@@ -104,6 +104,7 @@ class _ScheduledPaymentsListScreenState
   }
 
   Widget _buildPaymentCard(ScheduledPaymentModel payment) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final dateFormat = DateFormat('MMM dd, yyyy');
 
     return Container(
@@ -149,7 +150,7 @@ class _ScheduledPaymentsListScreenState
                         // Payee name
                         Text(
                           payment.payeeName,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
                             color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,

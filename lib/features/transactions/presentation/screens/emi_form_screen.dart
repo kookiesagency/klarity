@@ -382,7 +382,7 @@ class _EmiFormScreenState extends ConsumerState<EmiFormScreen> {
         ),
         title: Text(
           isEditing ? 'Edit EMI' : 'New EMI',
-          style: const TextStyle(
+          style: TextStyle(
             color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -414,7 +414,7 @@ class _EmiFormScreenState extends ConsumerState<EmiFormScreen> {
               const SizedBox(height: 32),
 
               // EMI Name
-              const Text(
+              Text(
                 'EMI Name',
                 style: TextStyle(
                   fontSize: 16,
@@ -454,7 +454,7 @@ class _EmiFormScreenState extends ConsumerState<EmiFormScreen> {
               const SizedBox(height: 24),
 
               // Description (Optional)
-              const Text(
+              Text(
                 'Description (Optional)',
                 style: TextStyle(
                   fontSize: 16,
@@ -488,7 +488,7 @@ class _EmiFormScreenState extends ConsumerState<EmiFormScreen> {
               const SizedBox(height: 24),
 
               // Total Amount
-              const Text(
+              Text(
                 'Total Amount',
                 style: TextStyle(
                   fontSize: 16,
@@ -504,7 +504,7 @@ class _EmiFormScreenState extends ConsumerState<EmiFormScreen> {
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                   color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
@@ -512,7 +512,7 @@ class _EmiFormScreenState extends ConsumerState<EmiFormScreen> {
                 decoration: InputDecoration(
                   hintText: '0.00',
                   prefixText: '₹ ',
-                  prefixStyle: const TextStyle(
+                  prefixStyle: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
@@ -548,7 +548,7 @@ class _EmiFormScreenState extends ConsumerState<EmiFormScreen> {
               const SizedBox(height: 24),
 
               // Total Installments
-              const Text(
+              Text(
                 'Total Installments',
                 style: TextStyle(
                   fontSize: 16,
@@ -600,7 +600,7 @@ class _EmiFormScreenState extends ConsumerState<EmiFormScreen> {
 
               // Paid Installments (only show when creating new EMI)
               if (!isEditing) ...[
-                const Text(
+                Text(
                   'Paid Installments',
                   style: TextStyle(
                     fontSize: 16,
@@ -681,7 +681,7 @@ class _EmiFormScreenState extends ConsumerState<EmiFormScreen> {
               ],
 
               // Monthly Payment
-              const Text(
+              Text(
                 'Monthly Payment',
                 style: TextStyle(
                   fontSize: 16,
@@ -705,7 +705,7 @@ class _EmiFormScreenState extends ConsumerState<EmiFormScreen> {
                 decoration: InputDecoration(
                   hintText: '0.00',
                   prefixText: '₹ ',
-                  prefixStyle: const TextStyle(
+                  prefixStyle: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
@@ -740,7 +740,7 @@ class _EmiFormScreenState extends ConsumerState<EmiFormScreen> {
               const SizedBox(height: 24),
 
               // Account Selection
-              const Text(
+              Text(
                 'Account',
                 style: TextStyle(
                   fontSize: 16,
@@ -798,7 +798,7 @@ class _EmiFormScreenState extends ConsumerState<EmiFormScreen> {
               const SizedBox(height: 24),
 
               // Category Selection
-              const Text(
+              Text(
                 'Category',
                 style: TextStyle(
                   fontSize: 16,
@@ -856,7 +856,7 @@ class _EmiFormScreenState extends ConsumerState<EmiFormScreen> {
 
               if (!isEditing) ...[
                 // Start Date
-                const Text(
+                Text(
                   'Start Date',
                   style: TextStyle(
                     fontSize: 16,
@@ -923,7 +923,7 @@ class _EmiFormScreenState extends ConsumerState<EmiFormScreen> {
                 const SizedBox(height: 24),
 
                 // Payment Day of Month
-                const Text(
+                Text(
                   'Payment Day of Month',
                   style: TextStyle(
                     fontSize: 16,

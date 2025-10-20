@@ -177,7 +177,7 @@ class _PinSetupScreenState extends ConsumerState<PinSetupScreen> {
               // Title
               Text(
                 _isConfirming ? 'Confirm Your PIN' : 'Set Up Your PIN',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
                   color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
@@ -190,7 +190,7 @@ class _PinSetupScreenState extends ConsumerState<PinSetupScreen> {
                 _isConfirming
                     ? 'Enter your PIN again to confirm'
                     : 'Create a 4-digit PIN for quick access',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14,
                   color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                 ),

@@ -150,7 +150,7 @@ class _ScheduledPaymentFormScreenState
         ),
         title: Text(
           widget.payment == null ? 'New Scheduled Payment' : 'Edit Payment',
-          style: const TextStyle(
+          style: TextStyle(
             color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -173,7 +173,7 @@ class _ScheduledPaymentFormScreenState
             const SizedBox(height: 24),
 
             // Amount
-            const Text(
+            Text(
               'Amount',
               style: TextStyle(
                 fontSize: 16,
@@ -220,7 +220,7 @@ class _ScheduledPaymentFormScreenState
             const SizedBox(height: 16),
 
             // Payee name
-            const Text(
+            Text(
               'Payee / Receiver Name',
               style: TextStyle(
                 fontSize: 16,
@@ -262,7 +262,7 @@ class _ScheduledPaymentFormScreenState
             const SizedBox(height: 16),
 
             // Account
-            const Text(
+            Text(
               'Account',
               style: TextStyle(
                 fontSize: 16,
@@ -275,7 +275,7 @@ class _ScheduledPaymentFormScreenState
             const SizedBox(height: 16),
 
             // Category
-            const Text(
+            Text(
               'Category',
               style: TextStyle(
                 fontSize: 16,
@@ -288,7 +288,7 @@ class _ScheduledPaymentFormScreenState
             const SizedBox(height: 16),
 
             // Due date
-            const Text(
+            Text(
               'Due Date',
               style: TextStyle(
                 fontSize: 16,
@@ -301,7 +301,7 @@ class _ScheduledPaymentFormScreenState
             const SizedBox(height: 16),
 
             // Reminder date
-            const Text(
+            Text(
               'Reminder Date (Optional)',
               style: TextStyle(
                 fontSize: 16,
@@ -314,7 +314,7 @@ class _ScheduledPaymentFormScreenState
             const SizedBox(height: 16),
 
             // Description
-            const Text(
+            Text(
               'Description (Optional)',
               style: TextStyle(
                 fontSize: 16,
@@ -500,6 +500,7 @@ class _ScheduledPaymentFormScreenState
   }
 
   Widget _buildDateSelector() {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return InkWell(
       onTap: () async {
         final date = await showDatePicker(
@@ -521,7 +522,7 @@ class _ScheduledPaymentFormScreenState
           children: [
             Text(
               DateFormat('MMM dd, yyyy').format(_dueDate),
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 16,
                 color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
               ),

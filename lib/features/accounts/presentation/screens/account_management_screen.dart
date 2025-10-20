@@ -48,7 +48,7 @@ class _AccountManagementScreenState extends ConsumerState<AccountManagementScree
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Delete Account'),
+        title: Text('Delete Account'),
         content: Text(
           'Are you sure you want to delete "${account.name}"?\n\n'
           'This will permanently delete all transactions associated with this account.',
@@ -113,7 +113,7 @@ class _AccountManagementScreenState extends ConsumerState<AccountManagementScree
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
+            Text(
               'Accounts',
               style: TextStyle(
                 color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
@@ -124,7 +124,7 @@ class _AccountManagementScreenState extends ConsumerState<AccountManagementScree
             if (activeProfile != null)
               Text(
                 activeProfile.name,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 12,
                   color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                   fontWeight: FontWeight.normal,
@@ -135,7 +135,7 @@ class _AccountManagementScreenState extends ConsumerState<AccountManagementScree
         centerTitle: true,
       ),
       body: accountState.isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator())
           : accounts.isEmpty
               ? Center(
                   child: Column(
@@ -246,7 +246,7 @@ class _AccountManagementScreenState extends ConsumerState<AccountManagementScree
                                         children: [
                                           Text(
                                             account.name,
-                                            style: const TextStyle(
+                                            style: TextStyle(
                                               fontSize: 16,
                                               fontWeight: FontWeight.bold,
                                               color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,

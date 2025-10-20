@@ -132,11 +132,13 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
         minChildSize: 0.3,
         maxChildSize: 0.8,
         expand: false,
-        builder: (context, scrollController) => Container(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+        builder: (context, scrollController) {
+          final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+          return Container(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
               // Handle bar
               Center(
                 child: Container(
@@ -151,7 +153,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
               const SizedBox(height: 20),
 
               // Title
-              const Text(
+              Text(
                 'Select Date Range',
                 style: TextStyle(
                   fontSize: 20,
@@ -209,7 +211,8 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
               ),
             ],
           ),
-        ),
+        );
+        },
       ),
     );
   }
@@ -226,7 +229,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
         title: Column(
           children: [
             // Title
-            const Text(
+            Text(
               'Analytics',
               style: TextStyle(
                 color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
@@ -265,7 +268,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
           unselectedLabelColor: AppColors.textSecondary,
           indicatorColor: AppColors.primary,
           indicatorWeight: 3,
-          labelStyle: const TextStyle(
+          labelStyle: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
           ),
@@ -381,7 +384,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
       error: (error, stack) => Center(
         child: Text(
           'Error loading analytics',
-          style: const TextStyle(color: AppColors.error),
+          style: TextStyle(color: AppColors.error),
         ),
       ),
     );
@@ -423,9 +426,10 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
   }
 
   Widget _buildSectionHeader(String title) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Text(
       title,
-      style: const TextStyle(
+      style: TextStyle(
         fontSize: 18,
         fontWeight: FontWeight.bold,
         color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
@@ -480,7 +484,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
       error: (error, stack) => Center(
         child: Text(
           'Error loading data',
-          style: const TextStyle(color: AppColors.error),
+          style: TextStyle(color: AppColors.error),
         ),
       ),
     );
@@ -513,6 +517,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
     required IconData icon,
     required Color color,
   }) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -537,7 +542,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
           const SizedBox(height: 12),
           Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
               fontSize: 12,
               fontWeight: FontWeight.w500,
@@ -546,7 +551,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
           const SizedBox(height: 4),
           Text(
             amount,
-            style: const TextStyle(
+            style: TextStyle(
               color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -558,6 +563,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
   }
 
   Widget _buildBalanceTrendChart() {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final activeProfile = ref.watch(activeProfileProvider);
     if (activeProfile == null) {
       return const SizedBox.shrink();
@@ -656,7 +662,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
                       final date = DateTime.parse(sortedEntries[index].key);
                       return Text(
                         DateFormat('MMM d').format(date),
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                           fontSize: 10,
                         ),
@@ -672,7 +678,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
                     getTitlesWidget: (value, meta) {
                       return Text(
                         NumberFormat.compact().format(value),
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                           fontSize: 10,
                         ),
@@ -747,6 +753,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
   }
 
   Widget _buildSpendingOverview() {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final activeProfile = ref.watch(activeProfileProvider);
     if (activeProfile == null) {
       return const SizedBox.shrink();
@@ -825,14 +832,14 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
                           const SizedBox(height: 8),
                           Text(
                             topCategories[index].categoryIcon,
-                            style: const TextStyle(fontSize: 16),
+                            style: TextStyle(fontSize: 16),
                           ),
                           const SizedBox(height: 4),
                           Text(
                             topCategories[index].categoryName.length > 8
                                 ? '${topCategories[index].categoryName.substring(0, 8)}...'
                                 : topCategories[index].categoryName,
-                            style: const TextStyle(
+                            style: TextStyle(
                               color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                               fontSize: 10,
                             ),
@@ -851,7 +858,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
                     getTitlesWidget: (value, meta) {
                       return Text(
                         NumberFormat.compact().format(value),
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                           fontSize: 10,
                         ),
@@ -939,6 +946,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
   }
 
   Widget _buildCategoryPieChart() {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final activeProfile = ref.watch(activeProfileProvider);
     if (activeProfile == null) {
       return const SizedBox.shrink();
@@ -1008,7 +1016,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
               value: category.amount,
               title: '${percentage.toStringAsFixed(1)}%',
               radius: 100,
-              titleStyle: const TextStyle(
+              titleStyle: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
@@ -1026,7 +1034,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
               value: othersAmount,
               title: '${othersPercentage.toStringAsFixed(1)}%',
               radius: 100,
-              titleStyle: const TextStyle(
+              titleStyle: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
@@ -1087,7 +1095,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
                         const SizedBox(width: 6),
                         Text(
                           category.categoryName,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 12,
                             color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                           ),
@@ -1112,7 +1120,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
                         const SizedBox(width: 6),
                         Text(
                           'Others (${categories.length - 5})',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 12,
                             color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                           ),
@@ -1168,6 +1176,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
   }
 
   Widget _buildTopCategoriesList() {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final activeProfile = ref.watch(activeProfileProvider);
     if (activeProfile == null) {
       return const SizedBox.shrink();
@@ -1233,7 +1242,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
                       children: [
                         Text(
                           category.categoryIcon,
-                          style: const TextStyle(fontSize: 24),
+                          style: TextStyle(fontSize: 24),
                         ),
                         const SizedBox(width: 12),
                         Expanded(
@@ -1242,7 +1251,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
                             children: [
                               Text(
                                 category.categoryName,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
                                   color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
@@ -1251,7 +1260,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
                               const SizedBox(height: 4),
                               Text(
                                 '${category.transactionCount} transaction${category.transactionCount > 1 ? 's' : ''}',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 12,
                                   color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                                 ),
@@ -1264,7 +1273,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
                           children: [
                             Text(
                               NumberFormat.currency(symbol: '₹').format(category.amount),
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
                                 color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
@@ -1273,7 +1282,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
                             const SizedBox(height: 4),
                             Text(
                               '${percentage.toStringAsFixed(1)}%',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 12,
                                 color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                               ),
@@ -1335,6 +1344,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
     );
   }
   Widget _buildBudgetOverview() {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final budgetState = ref.watch(budgetProvider);
     final categoryState = ref.watch(categoryProvider);
 
@@ -1376,7 +1386,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
           child: Text(
             'Error: ${budgetState.error}',
             textAlign: TextAlign.center,
-            style: const TextStyle(color: AppColors.error),
+            style: TextStyle(color: AppColors.error),
           ),
         ),
       );
@@ -1397,7 +1407,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
             ),
           ],
         ),
-        child: const Center(
+        child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -1406,7 +1416,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
                 size: 64,
                 color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Text(
                 'No Budgets Set',
                 style: TextStyle(
@@ -1415,7 +1425,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
                   color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
                 'Set budgets for your expense categories\nto track your spending',
                 textAlign: TextAlign.center,
@@ -1454,6 +1464,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
     required category,
     required BudgetStatus status,
   }) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     // Determine progress bar color based on alert level
     Color progressColor;
     switch (status.alertLevel) {
@@ -1509,7 +1520,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
                   child: Center(
                     child: Text(
                       category.icon,
-                      style: const TextStyle(fontSize: 24),
+                      style: TextStyle(fontSize: 24),
                     ),
                   ),
                 ),
@@ -1521,7 +1532,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
                     children: [
                       Text(
                         category.name,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
@@ -1530,7 +1541,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
                       const SizedBox(height: 2),
                       Text(
                         status.budget.period.displayName,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 12,
                           color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                         ),
@@ -1580,7 +1591,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Spent',
                       style: TextStyle(
                         fontSize: 12,
@@ -1590,7 +1601,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
                     const SizedBox(height: 4),
                     Text(
                       NumberFormat.currency(symbol: '₹').format(status.spent),
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
@@ -1601,7 +1612,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    const Text(
+                    Text(
                       'Budget',
                       style: TextStyle(
                         fontSize: 12,
@@ -1611,7 +1622,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
                     const SizedBox(height: 4),
                     Text(
                       NumberFormat.currency(symbol: '₹').format(status.budget.amount),
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
@@ -1657,6 +1668,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
   }
 
   Widget _buildNetSavingsCard(AnalyticsSummary summary) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final netSavings = summary.netBalance;
     final isPositive = netSavings >= 0;
 
@@ -1691,7 +1703,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
               children: [
                 Text(
                   isPositive ? 'Net Savings' : 'Net Loss',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
@@ -1715,6 +1727,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
   }
 
   Widget _buildIncomeExpenseComparison(AnalyticsSummary summary) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final maxValue = summary.totalIncome > summary.totalExpense
         ? summary.totalIncome
         : summary.totalExpense;
@@ -1744,7 +1757,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
                 width: 80,
                 child: Text(
                   'Income',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
@@ -1766,7 +1779,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
                     const SizedBox(height: 4),
                     Text(
                       NumberFormat.currency(symbol: '₹').format(summary.totalIncome),
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 12,
                         color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                       ),
@@ -1784,7 +1797,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
                 width: 80,
                 child: Text(
                   'Expenses',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                     color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
@@ -1806,7 +1819,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
                     const SizedBox(height: 4),
                     Text(
                       NumberFormat.currency(symbol: '₹').format(summary.totalExpense),
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 12,
                         color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                       ),
@@ -1822,6 +1835,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
   }
 
   Widget _buildSavingsRate(AnalyticsSummary summary) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final savingsRate = summary.savingsRate;
     final isPositive = savingsRate >= 0;
 
@@ -1839,7 +1853,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Title
-          const Text(
+          Text(
             'Savings Rate',
             style: TextStyle(
               fontSize: 14,
@@ -1893,6 +1907,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
   }
 
   Widget _buildTransactionCount(AnalyticsSummary summary) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final rangeLabel = _selectedRange.label.toLowerCase();
 
     return Container(
@@ -1908,7 +1923,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Total Transactions',
             style: TextStyle(
               fontSize: 14,
@@ -1922,7 +1937,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
             children: [
               Text(
                 '${summary.transactionCount}',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
                   color: AppColors.primary,
@@ -1933,7 +1948,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
                 padding: const EdgeInsets.only(bottom: 6),
                 child: Text(
                   'transaction${summary.transactionCount == 1 ? '' : 's'}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 14,
                     color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                   ),
@@ -1946,7 +1961,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
             _selectedRange == DateRangeType.custom
                 ? 'in selected period'
                 : 'in $rangeLabel',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 13,
               color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
             ),
@@ -1957,6 +1972,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
   }
 
   Widget _buildAverageDailySpending(AnalyticsSummary summary) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final (startDate, endDate) = _getDateRange();
     final days = endDate.difference(startDate).inDays + 1;
     final netSpending = summary.totalExpense - summary.totalIncome;
@@ -1977,7 +1993,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Daily Average',
             style: TextStyle(
               fontSize: 14,
@@ -1997,7 +2013,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
           const SizedBox(height: 8),
           Text(
             'per day across $days day${days == 1 ? '' : 's'}',
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 13,
               color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
             ),
@@ -2008,6 +2024,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
   }
 
   Widget _buildPeriodComparison() {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final activeProfile = ref.watch(activeProfileProvider);
     if (activeProfile == null) {
       return const SizedBox.shrink();
@@ -2068,7 +2085,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
               children: [
                 Text(
                   'Compared to $periodLabel',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
@@ -2130,6 +2147,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
     required bool isIncrease,
     required bool isGoodChange,
   }) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Row(
       children: [
         Expanded(
@@ -2138,7 +2156,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
             children: [
               Text(
                 label,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                   color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
@@ -2147,7 +2165,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
               const SizedBox(height: 4),
               Text(
                 NumberFormat.currency(symbol: '₹').format(currentAmount),
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
@@ -2189,6 +2207,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
   }
 
   Widget _buildFinancialHealthScore(AnalyticsSummary summary) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final score = summary.healthScore;
     final status = summary.healthStatus;
     final color = summary.healthColor;
@@ -2208,7 +2227,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'Financial Health',
                 style: TextStyle(
                   fontSize: 16,
@@ -2258,7 +2277,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
                       color: color,
                     ),
                   ),
-                  const Text(
+                  Text(
                     'Score',
                     style: TextStyle(
                       fontSize: 14,
@@ -2273,7 +2292,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
           Text(
             _getHealthScoreMessage(score),
             textAlign: TextAlign.center,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 13,
               color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
             ),
@@ -2296,6 +2315,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
   }
 
   Widget _buildLargestExpense(AnalyticsSummary summary) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final largestExpense = summary.largestExpense;
 
     if (largestExpense == null) {
@@ -2309,7 +2329,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
             width: 1,
           ),
         ),
-        child: const Center(
+        child: Center(
           child: Text(
             'No expenses in this period',
             style: TextStyle(
@@ -2334,7 +2354,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
+          Text(
             'Biggest Expense',
             style: TextStyle(
               fontSize: 14,
@@ -2355,7 +2375,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
                 ),
                 child: Text(
                   largestExpense.categoryIcon,
-                  style: const TextStyle(fontSize: 28),
+                  style: TextStyle(fontSize: 28),
                 ),
               ),
               const SizedBox(width: 12),
@@ -2365,7 +2385,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
                   children: [
                     Text(
                       NumberFormat.currency(symbol: '₹').format(largestExpense.amount),
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                         color: AppColors.error,
@@ -2374,7 +2394,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
                     const SizedBox(height: 4),
                     Text(
                       largestExpense.categoryName,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 13,
                         color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                       ),
@@ -2389,7 +2409,7 @@ class _AnalyticsScreenState extends ConsumerState<AnalyticsScreen>
           // Date
           Text(
             DateFormat('MMM dd, yyyy').format(largestExpense.date),
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 12,
               color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
             ),

@@ -110,7 +110,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                 const SizedBox(height: 32),
 
                 // Title
-                const Text(
+                Text(
                   'Create Account',
                   style: TextStyle(
                     fontSize: 28,

@@ -41,7 +41,7 @@ class _EmiListScreenState extends ConsumerState<EmiListScreen>
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Delete EMI'),
+        title: Text('Delete EMI'),
         content: Text(
           'Are you sure you want to delete "${emi.name}"?\n\nThis will also delete all payment history.',
         ),
@@ -120,7 +120,7 @@ class _EmiListScreenState extends ConsumerState<EmiListScreen>
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
+            Text(
               'EMIs',
               style: TextStyle(
                 color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
@@ -131,7 +131,7 @@ class _EmiListScreenState extends ConsumerState<EmiListScreen>
             if (activeProfile != null)
               Text(
                 activeProfile.name,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 12,
                   color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                   fontWeight: FontWeight.normal,
@@ -186,7 +186,7 @@ class _EmiListScreenState extends ConsumerState<EmiListScreen>
         ),
       ),
       body: state.isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? Center(child: CircularProgressIndicator())
           : Column(
               children: [
                 // Summary Card
@@ -315,7 +315,7 @@ class _EmiListScreenState extends ConsumerState<EmiListScreen>
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Monthly Payment',
                       style: TextStyle(
                         color: Colors.white70,
@@ -325,7 +325,7 @@ class _EmiListScreenState extends ConsumerState<EmiListScreen>
                     const SizedBox(height: 4),
                     Text(
                       '₹${state.totalMonthlyPayment.toStringAsFixed(2)}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.white,
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
@@ -407,6 +407,7 @@ class _EmiListScreenState extends ConsumerState<EmiListScreen>
   }
 
   Widget _buildEmiCard(EmiModel emi) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final dateFormat = DateFormat('MMM dd, yyyy');
     final progressColor = emi.progressPercentage >= 75
         ? AppColors.success
@@ -564,7 +565,7 @@ class _EmiListScreenState extends ConsumerState<EmiListScreen>
                     children: [
                       Text(
                         '${emi.paidInstallments}/${emi.totalInstallments} paid',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
                           color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,

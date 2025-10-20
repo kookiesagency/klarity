@@ -149,32 +149,34 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (context) => Container(
-        height: MediaQuery.of(context).size.height * 0.7,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: Column(
-          children: [
-            const SizedBox(height: 12),
-            Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(2),
+      builder: (context) {
+        final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+        return Container(
+          height: MediaQuery.of(context).size.height * 0.7,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: Column(
+            children: [
+              const SizedBox(height: 12),
+              Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(2),
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'Select Icon',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
+              const SizedBox(height: 20),
+              Text(
+                'Select Icon',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
+                ),
               ),
-            ),
             const SizedBox(height: 20),
             Expanded(
               child: GridView.builder(
@@ -218,10 +220,11 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
                 },
               ),
             ),
-            const SizedBox(height: 20),
-          ],
-        ),
-      ),
+              const SizedBox(height: 20),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -229,32 +232,34 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
-      builder: (context) => Container(
-        padding: const EdgeInsets.all(24),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(2),
+      builder: (context) {
+        final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+        return Container(
+          padding: const EdgeInsets.all(24),
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(2),
+                ),
               ),
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'Select Color',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
+              const SizedBox(height: 20),
+              Text(
+                'Select Color',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
+                ),
               ),
-            ),
             const SizedBox(height: 24),
             Wrap(
               spacing: 16,
@@ -293,7 +298,8 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
             const SizedBox(height: 24),
           ],
         ),
-      ),
+      );
+      },
     );
   }
 
@@ -320,7 +326,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
         ),
         title: Text(
           isEditing ? 'Edit Category' : 'Add Category',
-          style: const TextStyle(
+          style: TextStyle(
             color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -358,7 +364,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
               const SizedBox(height: 32),
 
               // Category Name
-              const Text(
+              Text(
                 'Category Name',
                 style: TextStyle(
                   fontSize: 16,
@@ -402,7 +408,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
               const SizedBox(height: 24),
 
               // Category Type (only for new categories)
-              const Text(
+              Text(
                 'Category Type',
                 style: TextStyle(
                   fontSize: 16,
@@ -438,14 +444,14 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
                         children: [
                           Text(
                             _selectedType.displayName,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                               color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                             ),
                           ),
                           const SizedBox(height: 2),
-                          const Text(
+                          Text(
                             'Type cannot be changed',
                             style: TextStyle(
                               fontSize: 12,
@@ -515,7 +521,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
               const SizedBox(height: 24),
 
               // Icon Selector
-              const Text(
+              Text(
                 'Icon',
                 style: TextStyle(
                   fontSize: 16,
@@ -550,7 +556,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
                         ),
                       ),
                       const SizedBox(width: 16),
-                      const Expanded(
+                      Expanded(
                         child: Text(
                           'Tap to select icon',
                           style: TextStyle(
@@ -571,7 +577,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
               const SizedBox(height: 24),
 
               // Color Selector
-              const Text(
+              Text(
                 'Color',
                 style: TextStyle(
                   fontSize: 16,
@@ -604,7 +610,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
                         ),
                       ),
                       const SizedBox(width: 16),
-                      const Expanded(
+                      Expanded(
                         child: Text(
                           'Tap to select color',
                           style: TextStyle(
@@ -636,7 +642,7 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
                     Expanded(
                       child: Text(
                         'Budget Limit',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,

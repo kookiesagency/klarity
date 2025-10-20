@@ -98,6 +98,7 @@ class _RecurringTransactionsListScreenState
   }
 
   void _showFilterSheet() {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     showModalBottomSheet(
       context: context,
 
@@ -110,7 +111,7 @@ class _RecurringTransactionsListScreenState
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'Filter Recurring Transactions',
               style: TextStyle(
                 fontSize: 20,
@@ -121,7 +122,7 @@ class _RecurringTransactionsListScreenState
             const SizedBox(height: 24),
 
             // Type Filter
-            const Text(
+            Text(
               'Type',
               style: TextStyle(
                 fontSize: 16,
@@ -164,7 +165,7 @@ class _RecurringTransactionsListScreenState
             const SizedBox(height: 24),
 
             // Status Filter
-            const Text(
+            Text(
               'Status',
               style: TextStyle(
                 fontSize: 16,
@@ -211,7 +212,7 @@ class _RecurringTransactionsListScreenState
       appBar: AppBar(
   
         elevation: 0,
-        title: const Text(
+        title: Text(
           'Recurring Transactions',
           style: TextStyle(
             color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
@@ -296,6 +297,7 @@ class _RecurringTransactionsListScreenState
   Widget _buildRecurringTransactionCard(
     RecurringTransactionModel recurringTransaction,
   ) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final isIncome = recurringTransaction.type == TransactionType.income;
     final color = isIncome ? AppColors.success : AppColors.error;
 
@@ -468,7 +470,7 @@ class _RecurringTransactionsListScreenState
                         const SizedBox(width: 4),
                         Text(
                           recurringTransaction.categoryName ?? 'Category',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
                             color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
@@ -489,7 +491,7 @@ class _RecurringTransactionsListScreenState
                     ),
                     child: Text(
                       recurringTransaction.accountName ?? 'Account',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                         color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,

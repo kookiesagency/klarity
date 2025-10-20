@@ -121,7 +121,7 @@ class _CategoryManagementScreenState extends ConsumerState<CategoryManagementScr
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
+            Text(
               'Categories',
               style: TextStyle(
                 color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
@@ -132,7 +132,7 @@ class _CategoryManagementScreenState extends ConsumerState<CategoryManagementScr
             if (activeProfile != null)
               Text(
                 activeProfile.name,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 12,
                   color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                   fontWeight: FontWeight.normal,
@@ -279,6 +279,7 @@ class _CategoryManagementScreenState extends ConsumerState<CategoryManagementScr
           ),
           child: Consumer(
             builder: (context, ref, _) {
+              final isDarkMode = Theme.of(context).brightness == Brightness.dark;
               // Get budget status for expense categories
               final budgetState = ref.watch(budgetProvider);
               final budgetStatus = type == CategoryType.expense
@@ -331,7 +332,7 @@ class _CategoryManagementScreenState extends ConsumerState<CategoryManagementScr
                               children: [
                                 Text(
                                   category.name,
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold,
                                     color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,

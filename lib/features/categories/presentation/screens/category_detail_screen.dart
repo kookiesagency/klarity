@@ -189,7 +189,7 @@ class _CategoryDetailScreenState extends ConsumerState<CategoryDetailScreen> {
           icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: Text(
           'Category Details',
           style: TextStyle(
             color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
@@ -244,7 +244,7 @@ class _CategoryDetailScreenState extends ConsumerState<CategoryDetailScreen> {
                   const SizedBox(height: 16),
                   Text(
                     widget.category.name,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
@@ -285,7 +285,7 @@ class _CategoryDetailScreenState extends ConsumerState<CategoryDetailScreen> {
 
             // Budget Section (only for expense categories)
             if (isExpense && budgetStatus != null) ...[
-              const Text(
+              Text(
                 'Budget Overview',
                 style: TextStyle(
                   fontSize: 18,
@@ -327,7 +327,7 @@ class _CategoryDetailScreenState extends ConsumerState<CategoryDetailScreen> {
                             const SizedBox(height: 4),
                             Text(
                               '₹${budgetStatus.spent.toStringAsFixed(0)}',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
                                 color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
@@ -450,7 +450,7 @@ class _CategoryDetailScreenState extends ConsumerState<CategoryDetailScreen> {
                         ),
                         Text(
                           budgetStatus.budget.period.displayName,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                             color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
@@ -471,7 +471,7 @@ class _CategoryDetailScreenState extends ConsumerState<CategoryDetailScreen> {
                         ),
                         Text(
                           '${budgetStatus.budget.alertThreshold}%',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                             color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
@@ -484,7 +484,7 @@ class _CategoryDetailScreenState extends ConsumerState<CategoryDetailScreen> {
               ),
               const SizedBox(height: 24),
             ] else if (isExpense) ...[
-              const Text(
+              Text(
                 'Budget',
                 style: TextStyle(
                   fontSize: 18,
@@ -556,7 +556,7 @@ class _CategoryDetailScreenState extends ConsumerState<CategoryDetailScreen> {
             ],
 
             // Category Details
-            const Text(
+            Text(
               'Details',
               style: TextStyle(
                 fontSize: 18,
@@ -684,7 +684,7 @@ class _DetailRow extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     value,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                       color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,

@@ -299,7 +299,7 @@ class _TransferFormScreenState extends ConsumerState<TransferFormScreen> {
           icon: const Icon(Icons.close, color: AppColors.textPrimary),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: Text(
           'Transfer Money',
           style: TextStyle(
             color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
@@ -333,7 +333,7 @@ class _TransferFormScreenState extends ConsumerState<TransferFormScreen> {
               const SizedBox(height: 32),
 
               // Amount Input
-              const Text(
+              Text(
                 'Amount',
                 style: TextStyle(
                   fontSize: 16,
@@ -349,7 +349,7 @@ class _TransferFormScreenState extends ConsumerState<TransferFormScreen> {
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
                   color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
@@ -357,7 +357,7 @@ class _TransferFormScreenState extends ConsumerState<TransferFormScreen> {
                 decoration: InputDecoration(
                   hintText: '0.00',
                   prefixText: '₹ ',
-                  prefixStyle: const TextStyle(
+                  prefixStyle: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
                     color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
@@ -392,7 +392,7 @@ class _TransferFormScreenState extends ConsumerState<TransferFormScreen> {
               const SizedBox(height: 24),
 
               // From Account
-              const Text(
+              Text(
                 'From Account',
                 style: TextStyle(
                   fontSize: 16,
@@ -492,7 +492,7 @@ class _TransferFormScreenState extends ConsumerState<TransferFormScreen> {
               const SizedBox(height: 24),
 
               // To Account
-              const Text(
+              Text(
                 'To Account',
                 style: TextStyle(
                   fontSize: 16,
@@ -565,7 +565,7 @@ class _TransferFormScreenState extends ConsumerState<TransferFormScreen> {
               const SizedBox(height: 24),
 
               // Date Selection
-              const Text(
+              Text(
                 'Date',
                 style: TextStyle(
                   fontSize: 16,
@@ -605,7 +605,7 @@ class _TransferFormScreenState extends ConsumerState<TransferFormScreen> {
               const SizedBox(height: 24),
 
               // Description (Optional)
-              const Text(
+              Text(
                 'Description (Optional)',
                 style: TextStyle(
                   fontSize: 16,

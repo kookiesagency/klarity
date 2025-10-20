@@ -96,6 +96,7 @@ class AccountDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final balanceColor = _getBalanceColor();
     final balanceDiff = account.currentBalance - account.openingBalance;
     final isPositiveDiff = balanceDiff >= 0;
@@ -107,7 +108,7 @@ class AccountDetailScreen extends ConsumerWidget {
           icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: Text(
           'Account Details',
           style: TextStyle(
             color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
@@ -247,7 +248,7 @@ class AccountDetailScreen extends ConsumerWidget {
             const SizedBox(height: 32),
 
             // Balance Summary
-            const Text(
+            Text(
               'Balance Summary',
               style: TextStyle(
                 fontSize: 18,
@@ -282,7 +283,7 @@ class AccountDetailScreen extends ConsumerWidget {
             const SizedBox(height: 32),
 
             // Account Details
-            const Text(
+            Text(
               'Account Information',
               style: TextStyle(
                 fontSize: 18,
@@ -483,7 +484,7 @@ class _DetailRow extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     value,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                       color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,

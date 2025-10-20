@@ -124,6 +124,7 @@ class TransactionDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final isIncome = transaction.type == TransactionType.income;
     final color = isIncome ? Colors.green : Colors.red;
 
@@ -136,7 +137,7 @@ class TransactionDetailScreen extends ConsumerWidget {
           icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: Text(
           'Transaction Details',
           style: TextStyle(
             color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
@@ -421,7 +422,7 @@ class _DetailRow extends StatelessWidget {
                     Expanded(
                       child: Text(
                         value,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                           color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,

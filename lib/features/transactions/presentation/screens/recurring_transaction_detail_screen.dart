@@ -36,22 +36,22 @@ class RecurringTransactionDetailScreen extends ConsumerWidget {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Delete Recurring Transaction'),
-        content: const Text(
+        title: Text('Delete Recurring Transaction'),
+        content: Text(
           'Are you sure you want to delete this recurring transaction?\n\n'
           'This will not delete existing transactions that have already been created.',
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancel'),
+            child: Text('Cancel'),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
             style: TextButton.styleFrom(
               foregroundColor: Colors.red,
             ),
-            child: const Text('Delete'),
+            child: Text('Delete'),
           ),
         ],
       ),
@@ -109,6 +109,7 @@ class RecurringTransactionDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final isIncome = recurringTransaction.type == TransactionType.income;
     final color = isIncome ? Colors.green : Colors.red;
     final hasEnded = recurringTransaction.hasEnded();
@@ -121,7 +122,7 @@ class RecurringTransactionDetailScreen extends ConsumerWidget {
           icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: Text(
           'Recurring Transaction',
           style: TextStyle(
             color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
@@ -176,7 +177,7 @@ class RecurringTransactionDetailScreen extends ConsumerWidget {
                   const SizedBox(height: 12),
                   Text(
                     'Recurring ${isIncome ? 'Income' : 'Expense'}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.white70,
                       fontSize: 16,
                     ),
@@ -184,7 +185,7 @@ class RecurringTransactionDetailScreen extends ConsumerWidget {
                   const SizedBox(height: 8),
                   Text(
                     '₹${recurringTransaction.amount.toStringAsFixed(2)}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: Colors.white,
                       fontSize: 40,
                       fontWeight: FontWeight.bold,
@@ -199,7 +200,7 @@ class RecurringTransactionDetailScreen extends ConsumerWidget {
                     ),
                     child: Text(
                       recurringTransaction.frequency.label,
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
@@ -334,7 +335,7 @@ class RecurringTransactionDetailScreen extends ConsumerWidget {
               const SizedBox(height: 16),
             ],
 
-            const Text(
+            Text(
               'Transaction Details',
               style: TextStyle(
                 fontSize: 18,
@@ -457,7 +458,7 @@ class RecurringTransactionDetailScreen extends ConsumerWidget {
             const SizedBox(height: 24),
 
             // Metadata
-            const Text(
+            Text(
               'Information',
               style: TextStyle(
                 fontSize: 18,
@@ -499,7 +500,7 @@ class RecurringTransactionDetailScreen extends ConsumerWidget {
                 ),
               ),
               icon: const Icon(Icons.edit, color: Colors.white),
-              label: const Text(
+              label: Text(
                 'Edit Recurring Transaction',
                 style: TextStyle(
                   fontSize: 16,
@@ -573,14 +574,14 @@ class _DetailRow extends StatelessWidget {
                       if (emoji != null) ...[
                         Text(
                           emoji!,
-                          style: const TextStyle(fontSize: 18),
+                          style: TextStyle(fontSize: 18),
                         ),
                         const SizedBox(width: 8),
                       ],
                       Expanded(
                         child: Text(
                           value,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                             color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,

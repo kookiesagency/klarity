@@ -208,6 +208,7 @@ class _EmiAutoPaymentSettingsScreenState
   }
 
   Widget _buildInfoCard() {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Card(
       elevation: 1,
       color: AppColors.primary.withOpacity(0.05),
@@ -237,7 +238,7 @@ class _EmiAutoPaymentSettingsScreenState
               'Auto-payment automatically processes your EMI payments when they are due. '
               'The service checks for due payments at your configured interval and creates '
               'transactions automatically.',
-              style: const TextStyle(fontSize: 16).copyWith(
+              style: TextStyle(fontSize: 16).copyWith(
                 color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
               ),
             ),
@@ -278,6 +279,7 @@ class _EmiAutoPaymentSettingsScreenState
   }
 
   Widget _buildStatusCard(AutoPaymentState state) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Card(
       elevation: 1,
       child: Padding(
@@ -348,7 +350,7 @@ class _EmiAutoPaymentSettingsScreenState
                       children: [
                         Text(
                           'Last Processed',
-                          style: const TextStyle(fontSize: 12).copyWith(
+                          style: TextStyle(fontSize: 12).copyWith(
                             color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                           ),
                         ),
@@ -401,6 +403,7 @@ class _EmiAutoPaymentSettingsScreenState
   }
 
   Widget _buildSettingsCard(AutoPaymentState state) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Card(
       elevation: 1,
       child: Padding(
@@ -427,7 +430,7 @@ class _EmiAutoPaymentSettingsScreenState
             const SizedBox(height: 8),
             Text(
               'How often should the system check for due payments?',
-              style: const TextStyle(fontSize: 12).copyWith(
+              style: TextStyle(fontSize: 12).copyWith(
                 color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
               ),
             ),
@@ -478,7 +481,7 @@ class _EmiAutoPaymentSettingsScreenState
                 padding: const EdgeInsets.only(top: 8),
                 child: Text(
                   'Enable auto-payment to change the interval',
-                  style: const TextStyle(fontSize: 12).copyWith(
+                  style: TextStyle(fontSize: 12).copyWith(
                     color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                     fontStyle: FontStyle.italic,
                   ),
@@ -491,6 +494,7 @@ class _EmiAutoPaymentSettingsScreenState
   }
 
   Widget _buildManualProcessCard(AutoPaymentState state) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Card(
       elevation: 1,
       child: Padding(
@@ -517,7 +521,7 @@ class _EmiAutoPaymentSettingsScreenState
             const SizedBox(height: 8),
             Text(
               'Process all due EMI payments immediately',
-              style: const TextStyle(fontSize: 12).copyWith(
+              style: TextStyle(fontSize: 12).copyWith(
                 color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
               ),
             ),

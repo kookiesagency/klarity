@@ -102,7 +102,7 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
         ),
         title: Text(
           isEditing ? 'Edit Account' : 'Add Account',
-          style: const TextStyle(
+          style: TextStyle(
             color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -137,7 +137,7 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
               const SizedBox(height: 32),
 
               // Account Name
-              const Text(
+              Text(
                 'Account Name',
                 style: TextStyle(
                   fontSize: 16,
@@ -181,7 +181,7 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
               const SizedBox(height: 24),
 
               // Account Type (only for new accounts)
-              const Text(
+              Text(
                 'Account Type',
                 style: TextStyle(
                   fontSize: 16,
@@ -213,14 +213,14 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
                         children: [
                           Text(
                             _selectedType.displayName,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w600,
                               color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
                             ),
                           ),
                           const SizedBox(height: 2),
-                          const Text(
+                          Text(
                             'Type cannot be changed',
                             style: TextStyle(
                               fontSize: 12,
@@ -280,7 +280,7 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
 
               // Opening Balance (only for new accounts)
               if (!isEditing) ...[
-                const Text(
+                Text(
                   'Opening Balance',
                   style: TextStyle(
                     fontSize: 16,
@@ -356,7 +356,7 @@ class _AccountFormScreenState extends ConsumerState<AccountFormScreen> {
                         )
                       : Text(
                           isEditing ? 'Update Account' : 'Create Account',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),

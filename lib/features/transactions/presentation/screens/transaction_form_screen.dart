@@ -398,7 +398,7 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
         ),
         title: Text(
           isEditing ? 'Edit Transaction' : 'Add Transaction',
-          style: const TextStyle(
+          style: TextStyle(
             color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -516,7 +516,7 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
               const SizedBox(height: 32),
 
               // Amount Input
-              const Text(
+              Text(
                 'Amount',
                 style: TextStyle(
                   fontSize: 16,
@@ -532,7 +532,7 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
                   color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
@@ -540,7 +540,7 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
                 decoration: InputDecoration(
                   hintText: '0.00',
                   prefixText: '₹ ',
-                  prefixStyle: const TextStyle(
+                  prefixStyle: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
                     color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
@@ -575,7 +575,7 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
               const SizedBox(height: 24),
 
               // Account Selection
-              const Text(
+              Text(
                 'Account',
                 style: TextStyle(
                   fontSize: 16,
@@ -633,7 +633,7 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
               const SizedBox(height: 24),
 
               // Category Selection
-              const Text(
+              Text(
                 'Category',
                 style: TextStyle(
                   fontSize: 16,
@@ -691,7 +691,7 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
               const SizedBox(height: 24),
 
               // Date Selection
-              const Text(
+              Text(
                 'Date',
                 style: TextStyle(
                   fontSize: 16,
@@ -731,7 +731,7 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
               const SizedBox(height: 24),
 
               // Description (Optional)
-              const Text(
+              Text(
                 'Description (Optional)',
                 style: TextStyle(
                   fontSize: 16,

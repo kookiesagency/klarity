@@ -513,7 +513,7 @@ class _RecurringTransactionFormScreenState
           widget.recurringTransaction != null
               ? 'Edit Recurring Transaction'
               : 'New Recurring Transaction',
-          style: const TextStyle(
+          style: TextStyle(
             color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -603,7 +603,7 @@ class _RecurringTransactionFormScreenState
               const SizedBox(height: 24),
 
               // Amount Input
-              const Text(
+              Text(
                 'Amount',
                 style: TextStyle(
                   fontSize: 16,
@@ -619,7 +619,7 @@ class _RecurringTransactionFormScreenState
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d{0,2}')),
                 ],
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
                   color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
@@ -627,7 +627,7 @@ class _RecurringTransactionFormScreenState
                 decoration: InputDecoration(
                   hintText: '0.00',
                   prefixText: '₹ ',
-                  prefixStyle: const TextStyle(
+                  prefixStyle: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
                     color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
@@ -662,7 +662,7 @@ class _RecurringTransactionFormScreenState
               const SizedBox(height: 24),
 
               // Account Selection
-              const Text(
+              Text(
                 'Account',
                 style: TextStyle(
                   fontSize: 16,
@@ -720,7 +720,7 @@ class _RecurringTransactionFormScreenState
               const SizedBox(height: 24),
 
               // Category Selection
-              const Text(
+              Text(
                 'Category',
                 style: TextStyle(
                   fontSize: 16,
@@ -777,7 +777,7 @@ class _RecurringTransactionFormScreenState
               const SizedBox(height: 24),
 
               // Frequency Selection
-              const Text(
+              Text(
                 'Frequency',
                 style: TextStyle(
                   fontSize: 16,
@@ -823,7 +823,7 @@ class _RecurringTransactionFormScreenState
               const SizedBox(height: 24),
 
               // Start Date
-              const Text(
+              Text(
                 'Start Date',
                 style: TextStyle(
                   fontSize: 16,
@@ -865,7 +865,7 @@ class _RecurringTransactionFormScreenState
               // End Date (Optional)
               Row(
                 children: [
-                  const Text(
+                  Text(
                     'End Date',
                     style: TextStyle(
                       fontSize: 16,
@@ -937,7 +937,7 @@ class _RecurringTransactionFormScreenState
               const SizedBox(height: 24),
 
               // Next Due Date
-              const Text(
+              Text(
                 'Next Due Date',
                 style: TextStyle(
                   fontSize: 16,
@@ -977,7 +977,7 @@ class _RecurringTransactionFormScreenState
               const SizedBox(height: 24),
 
               // Description (Optional)
-              const Text(
+              Text(
                 'Description (Optional)',
                 style: TextStyle(
                   fontSize: 16,

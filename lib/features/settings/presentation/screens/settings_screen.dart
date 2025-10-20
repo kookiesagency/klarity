@@ -267,7 +267,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                           icon: Icons.fingerprint,
                           title: 'Biometric Authentication',
                           subtitle: 'Not available on this device',
-                          trailing: const Icon(
+                          trailing: Icon(
                             Icons.info_outline,
                             color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                           ),
@@ -385,7 +385,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         icon: Icons.switch_account_outlined,
                         title: 'Manage Profiles',
                         subtitle: '$profileCount ${profileCount == 1 ? 'profile' : 'profiles'} • Active: ${activeProfile?.name ?? 'None'}',
-                        trailing: const Icon(
+                        trailing: Icon(
                           Icons.arrow_forward_ios,
                           size: 16,
                           color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
@@ -414,7 +414,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         icon: Icons.account_balance_wallet_outlined,
                         title: 'Manage Accounts',
                         subtitle: '$accountCount ${accountCount == 1 ? 'account' : 'accounts'}',
-                        trailing: const Icon(
+                        trailing: Icon(
                           Icons.arrow_forward_ios,
                           size: 16,
                           color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
@@ -443,7 +443,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         icon: Icons.category_outlined,
                         title: 'Manage Categories',
                         subtitle: '$categoryCount ${categoryCount == 1 ? 'category' : 'categories'}',
-                        trailing: const Icon(
+                        trailing: Icon(
                           Icons.arrow_forward_ios,
                           size: 16,
                           color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
@@ -473,7 +473,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         icon: Icons.payments_outlined,
                         title: 'Manage EMIs',
                         subtitle: '$emiCount active ${emiCount == 1 ? 'EMI' : 'EMIs'}${totalMonthly > 0 ? ' • ₹${totalMonthly.toStringAsFixed(0)}/month' : ''}',
-                        trailing: const Icon(
+                        trailing: Icon(
                           Icons.arrow_forward_ios,
                           size: 16,
                           color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
@@ -504,7 +504,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         icon: Icons.event_note_outlined,
                         title: 'Scheduled Payments',
                         subtitle: '$pendingCount pending${partialCount > 0 ? ' • $partialCount partial' : ''}${overdueCount > 0 ? ' • $overdueCount overdue' : ''}',
-                        trailing: const Icon(
+                        trailing: Icon(
                           Icons.arrow_forward_ios,
                           size: 16,
                           color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,

@@ -28,6 +28,7 @@ class TransactionCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final isIncome = transaction.type == TransactionType.income;
     final color = isIncome ? AppColors.success : AppColors.error;
     final timeFormat = DateFormat('h:mm a');
@@ -87,7 +88,7 @@ class TransactionCard extends ConsumerWidget {
                         children: [
                           Text(
                             transaction.categoryName ?? 'Unknown',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,

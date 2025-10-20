@@ -79,6 +79,7 @@ class ProfileManagementScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final profileState = ref.watch(profileProvider);
     final profiles = profileState.profiles;
     final activeProfile = profileState.activeProfile;
@@ -90,7 +91,7 @@ class ProfileManagementScreen extends ConsumerWidget {
           icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
+        title: Text(
           'Manage Profiles',
           style: TextStyle(
             color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,

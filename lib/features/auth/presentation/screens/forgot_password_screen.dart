@@ -61,6 +61,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   }
 
   Widget _buildResetPasswordView() {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
 
       appBar: AppBar(
@@ -100,7 +101,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
                 const SizedBox(height: 32),
 
                 // Title
-                const Text(
+                Text(
                   'Forgot Password?',
                   style: TextStyle(
                     fontSize: 28,
@@ -182,6 +183,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
   }
 
   Widget _buildEmailSentView() {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Scaffold(
 
       appBar: AppBar(
@@ -219,7 +221,7 @@ class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
               const SizedBox(height: 32),
 
               // Title
-              const Center(
+              Center(
                 child: Text(
                   'Check Your Email',
                   style: TextStyle(

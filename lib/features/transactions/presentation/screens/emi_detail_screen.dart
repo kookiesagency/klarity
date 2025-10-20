@@ -582,6 +582,7 @@ class _EmiDetailScreenState extends ConsumerState<EmiDetailScreen> {
   }
 
   Widget _buildDetailRow(String label, String value, IconData icon) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Row(
       children: [
         Container(
@@ -603,7 +604,7 @@ class _EmiDetailScreenState extends ConsumerState<EmiDetailScreen> {
             children: [
               Text(
                 label,
-                style: const TextStyle(fontSize: 12).copyWith(
+                style: TextStyle(fontSize: 12).copyWith(
                   color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                 ),
               ),
@@ -622,6 +623,7 @@ class _EmiDetailScreenState extends ConsumerState<EmiDetailScreen> {
   }
 
   Widget _buildNotesCard() {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Card(
       elevation: 1,
       child: Padding(
@@ -648,7 +650,7 @@ class _EmiDetailScreenState extends ConsumerState<EmiDetailScreen> {
             const SizedBox(height: 12),
             Text(
               _emi!.notes!,
-              style: const TextStyle(fontSize: 16).copyWith(
+              style: TextStyle(fontSize: 16).copyWith(
                 color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
               ),
             ),
@@ -659,6 +661,7 @@ class _EmiDetailScreenState extends ConsumerState<EmiDetailScreen> {
   }
 
   Widget _buildPaymentHistorySection() {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Card(
       elevation: 1,
       child: Padding(
@@ -733,14 +736,14 @@ class _EmiDetailScreenState extends ConsumerState<EmiDetailScreen> {
                       const SizedBox(height: 8),
                       Text(
                         'No payments yet',
-                        style: const TextStyle(fontSize: 16).copyWith(
+                        style: TextStyle(fontSize: 16).copyWith(
                           color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                         ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         'Payments will appear here once processed',
-                        style: const TextStyle(fontSize: 12).copyWith(
+                        style: TextStyle(fontSize: 12).copyWith(
                           color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
                         ),
                         textAlign: TextAlign.center,
@@ -758,6 +761,7 @@ class _EmiDetailScreenState extends ConsumerState<EmiDetailScreen> {
   }
 
   Widget _buildPaymentList() {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     // Group payments by paid/unpaid
     final paidPayments = _payments.where((p) => p.isPaid).toList();
     final unpaidPayments = _payments.where((p) => !p.isPaid).toList();
@@ -784,7 +788,7 @@ class _EmiDetailScreenState extends ConsumerState<EmiDetailScreen> {
         if (unpaidPayments.isNotEmpty) ...[
           Text(
             'Upcoming Payments (${unpaidPayments.length})',
-            style: const TextStyle(fontSize: 16).copyWith(
+            style: TextStyle(fontSize: 16).copyWith(
               fontWeight: FontWeight.w600,
               color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
             ),

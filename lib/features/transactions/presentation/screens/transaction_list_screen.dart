@@ -657,6 +657,7 @@ class _TransactionListScreenState extends ConsumerState<TransactionListScreen> {
   }
 
   Future<void> _showBulkActions() async {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final selectedCount = ref.read(transactionProvider).selectedTransactionIds.length;
 
     await showModalBottomSheet(
@@ -672,7 +673,7 @@ class _TransactionListScreenState extends ConsumerState<TransactionListScreen> {
           children: [
             Text(
               '$selectedCount ${selectedCount == 1 ? 'transaction' : 'transactions'} selected',
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
@@ -1178,6 +1179,7 @@ class _TransactionListScreenState extends ConsumerState<TransactionListScreen> {
   }
 
   Widget _buildDateGroup(DateTime date, List<TransactionModel> transactions) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final dateFormat = DateFormat('MMM dd, yyyy');
     final isToday = DateFormat('yyyy-MM-dd').format(date) ==
         DateFormat('yyyy-MM-dd').format(DateTime.now());
@@ -1214,7 +1216,7 @@ class _TransactionListScreenState extends ConsumerState<TransactionListScreen> {
             children: [
               Text(
                 dateLabel,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
                   color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,

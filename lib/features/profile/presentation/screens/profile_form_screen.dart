@@ -90,7 +90,7 @@ class _ProfileFormScreenState extends ConsumerState<ProfileFormScreen> {
         ),
         title: Text(
           isEditing ? 'Edit Profile' : 'Add Profile',
-          style: const TextStyle(
+          style: TextStyle(
             color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -125,7 +125,7 @@ class _ProfileFormScreenState extends ConsumerState<ProfileFormScreen> {
               const SizedBox(height: 32),
 
               // Profile Name
-              const Text(
+              Text(
                 'Profile Name',
                 style: TextStyle(
                   fontSize: 16,
@@ -173,7 +173,7 @@ class _ProfileFormScreenState extends ConsumerState<ProfileFormScreen> {
               const SizedBox(height: 24),
 
               // Low Balance Threshold
-              const Text(
+              Text(
                 'Low Balance Alert Threshold',
                 style: TextStyle(
                   fontSize: 16,
@@ -259,7 +259,7 @@ class _ProfileFormScreenState extends ConsumerState<ProfileFormScreen> {
                         )
                       : Text(
                           isEditing ? 'Update Profile' : 'Create Profile',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
                           ),
