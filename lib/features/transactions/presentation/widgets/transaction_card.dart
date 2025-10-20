@@ -36,10 +36,12 @@ class TransactionCard extends ConsumerWidget {
     final cardContent = Container(
       margin: const EdgeInsets.only(bottom: 8),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: isDarkMode ? const Color(0xFF1E1E1E) : Colors.white,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: isSelected ? AppColors.primary : Colors.grey[200]!,
+          color: isSelected
+              ? AppColors.primary
+              : (isDarkMode ? Colors.grey[700]! : Colors.grey[200]!),
           width: isSelected ? 2 : 1,
         ),
       ),
@@ -104,7 +106,7 @@ class TransactionCard extends ConsumerWidget {
                                   transaction.accountName ?? 'Unknown Account',
                                   style: TextStyle(
                                     fontSize: 13,
-                                    color: Colors.grey[600],
+                                    color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
                                   ),
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -119,7 +121,7 @@ class TransactionCard extends ConsumerWidget {
                                     transaction.description!,
                                     style: TextStyle(
                                       fontSize: 13,
-                                      color: Colors.grey[600],
+                                      color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
                                     ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -132,7 +134,7 @@ class TransactionCard extends ConsumerWidget {
                             timeFormat.format(transaction.transactionDate),
                             style: TextStyle(
                               fontSize: 12,
-                              color: Colors.grey[500],
+                              color: isDarkMode ? Colors.grey[400] : Colors.grey[500],
                             ),
                           ),
                         ],

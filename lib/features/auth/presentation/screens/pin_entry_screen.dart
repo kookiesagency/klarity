@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:local_auth/local_auth.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/utils/extensions.dart';
 import '../../../../core/utils/validators.dart';
@@ -63,6 +64,8 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
   bool _isPinVerified = false;
   bool _isBiometricAvailable = false;
   bool _isBiometricEnabled = false;
+  BiometricType? _biometricType;
+  bool _hasBothBiometrics = false; // Track if both face and fingerprint are available
 
   @override
   void initState() {
@@ -78,73 +81,111 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
   }
 
   Future<void> _checkBiometricAvailability() async {
-    // Get userId from either Authenticated or SessionExpired state
-    final authState = ref.read(authProvider);
-    final String? userId;
-    if (authState is Authenticated) {
-      userId = authState.user.id;
-    } else if (authState is SessionExpired) {
-      userId = authState.userId;
-    } else {
-      return;
-    }
-
-    if (userId == null) return;
-
-    // Check if biometric is available on device
-    final biometricService = ref.read(biometricServiceProvider);
-    final availableResult = await biometricService.isBiometricAvailable();
-
-    // Load biometric enabled flag from local storage
-    final localPinService = ref.read(localPinServiceProvider);
-    final biometricEnabled = await localPinService.getBiometricEnabled(userId);
-
-    if (mounted) {
-      setState(() {
-        _isBiometricAvailable = availableResult.data ?? false;
-        _isBiometricEnabled = biometricEnabled;
-      });
-
-      // Auto-attempt biometric if enabled
-      if (_isBiometricEnabled && _isBiometricAvailable) {
-        _authenticateWithBiometric();
+    try {
+      // Get userId from either Authenticated or SessionExpired state
+      final authState = ref.read(authProvider);
+      final String? userId;
+      if (authState is Authenticated) {
+        userId = authState.user.id;
+      } else if (authState is SessionExpired) {
+        userId = authState.userId;
+      } else {
+        return;
       }
+
+      if (userId == null) return;
+
+      // Check if biometric is available on device
+      final biometricService = ref.read(biometricServiceProvider);
+      final availableResult = await biometricService.isBiometricAvailable();
+
+      // Get available biometric types
+      final biometricsResult = await biometricService.getAvailableBiometrics();
+      BiometricType? biometricType;
+      bool hasBothBiometrics = false;
+
+      if (biometricsResult.isSuccess && biometricsResult.data!.isNotEmpty) {
+        final availableBiometrics = biometricsResult.data!;
+
+        // Check if both face and fingerprint are available
+        final hasFace = availableBiometrics.contains(BiometricType.face);
+        final hasFingerprint = availableBiometrics.contains(BiometricType.fingerprint);
+        hasBothBiometrics = hasFace && hasFingerprint;
+
+        // Set biometric type (use null for smart icon when both available)
+        if (hasBothBiometrics) {
+          biometricType = null; // Will show generic biometric icon
+        } else if (hasFace) {
+          biometricType = BiometricType.face;
+        } else if (hasFingerprint) {
+          biometricType = BiometricType.fingerprint;
+        } else {
+          biometricType = availableBiometrics.first;
+        }
+      }
+
+      // Load biometric enabled flag from local storage
+      final localPinService = ref.read(localPinServiceProvider);
+      final biometricEnabled = await localPinService.getBiometricEnabled(userId);
+
+      if (mounted) {
+        setState(() {
+          _isBiometricAvailable = availableResult.data ?? false;
+          _isBiometricEnabled = biometricEnabled;
+          _biometricType = biometricType;
+          _hasBothBiometrics = hasBothBiometrics;
+        });
+
+        // Don't auto-trigger biometric on initial load to prevent crashes
+        // User can manually trigger it with the fingerprint button
+      }
+    } catch (e) {
+      print('⚠️ Error checking biometric availability: $e');
+      // Silently fail - don't crash the app
     }
   }
 
   Future<void> _authenticateWithBiometric() async {
     if (_isLoading || _isPinVerified) return;
 
-    setState(() => _isLoading = true);
+    try {
+      setState(() => _isLoading = true);
 
-    final result = await ref.read(authProvider.notifier).authenticateWithBiometric(
-          reason: 'Unlock your account',
-        );
+      final result = await ref.read(authProvider.notifier).authenticateWithBiometric(
+            reason: 'Unlock your account',
+          );
 
-    if (!mounted) return;
+      if (!mounted) return;
 
-    result.fold(
-      onSuccess: (isAuthenticated) {
-        if (isAuthenticated) {
-          setState(() {
-            _isPinVerified = true;
-            _isLoading = false;
-          });
-          ref.read(pinVerificationProvider.notifier).setPinVerified(true);
-        } else {
+      result.fold(
+        onSuccess: (isAuthenticated) {
+          if (isAuthenticated) {
+            setState(() {
+              _isPinVerified = true;
+              _isLoading = false;
+            });
+            ref.read(pinVerificationProvider.notifier).setPinVerified(true);
+          } else {
+            setState(() => _isLoading = false);
+            // Biometric failed, user can use PIN
+          }
+        },
+        onFailure: (exception) {
+          if (!mounted) return;
           setState(() => _isLoading = false);
           // Biometric failed, user can use PIN
-        }
-      },
-      onFailure: (exception) {
+          // Don't show error if user cancelled
+          if (!exception.message.contains('cancel') && !exception.message.contains('UserCancel')) {
+            context.showErrorSnackBar('Biometric authentication failed. Please use PIN.');
+          }
+        },
+      );
+    } catch (e) {
+      print('⚠️ Biometric authentication error: $e');
+      if (mounted) {
         setState(() => _isLoading = false);
-        // Biometric failed, user can use PIN
-        // Don't show error if user cancelled
-        if (!exception.message.contains('cancel')) {
-          context.showErrorSnackBar('Biometric authentication failed. Please use PIN.');
-        }
-      },
-    );
+      }
+    }
   }
 
   void _onPinChanged(String value) {
@@ -473,12 +514,20 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
                 Center(
                   child: IconButton(
                     onPressed: _authenticateWithBiometric,
-                    icon: const Icon(
-                      Icons.fingerprint,
+                    icon: Icon(
+                      _hasBothBiometrics
+                          ? Icons.security // Smart icon for both biometrics
+                          : (_biometricType == BiometricType.face
+                              ? Icons.face
+                              : Icons.fingerprint),
                       size: 48,
                       color: AppColors.lightPrimary,
                     ),
-                    tooltip: 'Use biometric authentication',
+                    tooltip: _hasBothBiometrics
+                        ? 'Use biometric authentication (Face ID or Fingerprint)'
+                        : (_biometricType == BiometricType.face
+                            ? 'Use Face ID'
+                            : 'Use fingerprint authentication'),
                   ),
                 ),
 

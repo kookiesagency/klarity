@@ -15,6 +15,7 @@ import '../../../transactions/presentation/providers/emi_provider.dart';
 import '../../../transactions/presentation/screens/emi_list_screen.dart';
 import '../../../scheduled_payments/presentation/providers/scheduled_payment_provider.dart';
 import '../../../scheduled_payments/presentation/screens/scheduled_payments_list_screen.dart';
+import '../../../documentation/presentation/screens/documentation_list_screen.dart';
 
 class SettingsScreen extends ConsumerStatefulWidget {
   const SettingsScreen({super.key});
@@ -122,7 +123,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
       builder: (context) => AlertDialog(
         title: Row(
           children: [
-            Icon(Icons.warning_amber_rounded, color: Colors.orange),
+            const Icon(Icons.warning_amber_rounded, color: Colors.orange),
             const SizedBox(width: 8),
             const Text('Session Expired'),
           ],
@@ -269,7 +270,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                           subtitle: 'Not available on this device',
                           trailing: Icon(
                             Icons.info_outline,
-                            color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
+                            color: isDarkTheme ? AppColors.darkTextSecondary : AppColors.textSecondary,
                           ),
                         );
                       }
@@ -339,7 +340,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                   _SettingsTile(
                     icon: Icons.dark_mode_outlined,
                     title: 'Dark Mode',
-                    subtitle: isDarkMode ? 'Enabled' : 'Disabled',
+                    subtitle: isDarkTheme ? 'Enabled' : 'Disabled',
                     trailing: SizedBox(
                       width: 51,
                       height: 31,
@@ -352,7 +353,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                               ),
                             )
                           : Switch(
-                              value: isDarkMode,
+                              value: isDarkTheme,
                               onChanged: _toggleDarkMode,
                               activeColor: AppColors.lightPrimary,
                             ),
@@ -388,7 +389,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         trailing: Icon(
                           Icons.arrow_forward_ios,
                           size: 16,
-                          color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
+                          color: isDarkTheme ? AppColors.darkTextSecondary : AppColors.textSecondary,
                         ),
                         onTap: () {
                           Navigator.push(
@@ -417,7 +418,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         trailing: Icon(
                           Icons.arrow_forward_ios,
                           size: 16,
-                          color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
+                          color: isDarkTheme ? AppColors.darkTextSecondary : AppColors.textSecondary,
                         ),
                         onTap: () {
                           Navigator.push(
@@ -446,7 +447,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         trailing: Icon(
                           Icons.arrow_forward_ios,
                           size: 16,
-                          color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
+                          color: isDarkTheme ? AppColors.darkTextSecondary : AppColors.textSecondary,
                         ),
                         onTap: () {
                           Navigator.push(
@@ -476,7 +477,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         trailing: Icon(
                           Icons.arrow_forward_ios,
                           size: 16,
-                          color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
+                          color: isDarkTheme ? AppColors.darkTextSecondary : AppColors.textSecondary,
                         ),
                         onTap: () {
                           Navigator.push(
@@ -507,7 +508,7 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         trailing: Icon(
                           Icons.arrow_forward_ios,
                           size: 16,
-                          color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
+                          color: isDarkTheme ? AppColors.darkTextSecondary : AppColors.textSecondary,
                         ),
                         onTap: () {
                           Navigator.push(
@@ -517,6 +518,41 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                             ),
                           );
                         },
+                      );
+                    },
+                  ),
+
+                  const SizedBox(height: 32),
+
+                  // Help & Support Section
+                  Text(
+                    'Help & Support',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: isDarkTheme
+                          ? AppColors.darkTextPrimary
+                          : AppColors.textPrimary,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+
+                  // Documentation & Tutorials Tile
+                  _SettingsTile(
+                    icon: Icons.library_books,
+                    title: 'Documentation & Tutorials',
+                    subtitle: 'Learn how to use all features',
+                    trailing: Icon(
+                      Icons.arrow_forward_ios,
+                      size: 16,
+                      color: isDarkTheme ? AppColors.darkTextSecondary : AppColors.textSecondary,
+                    ),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const DocumentationListScreen(),
+                        ),
                       );
                     },
                   ),
@@ -599,7 +635,7 @@ class _SettingsTile extends StatelessWidget {
               child: Icon(
                 icon,
                 color: isDarkTheme
-                    ? (titleColor ?? AppColors.lightPrimary.withOpacity(0.8))
+                    ? (titleColor ?? AppColors.darkPrimary)
                     : (titleColor ?? AppColors.lightPrimary),
                 size: 24,
               ),

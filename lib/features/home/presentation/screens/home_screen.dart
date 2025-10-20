@@ -770,9 +770,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              // EMI Icon - Navigate to EMI List
               IconButton(
-                icon: Icon(Icons.menu_rounded, color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary),
-                onPressed: () {},
+                icon: Icon(Icons.credit_card_rounded, color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const EmiListScreen(),
+                    ),
+                  );
+                },
               ),
               // Profile Selector
               GestureDetector(
@@ -811,9 +818,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   ),
                 ),
               ),
+              // Category Icon - Navigate to Category Management
               IconButton(
-                icon: Icon(Icons.notifications_outlined, color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary),
-                onPressed: () {},
+                icon: Icon(Icons.category_rounded, color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const CategoryManagementScreen(),
+                    ),
+                  );
+                },
               ),
             ],
           ),

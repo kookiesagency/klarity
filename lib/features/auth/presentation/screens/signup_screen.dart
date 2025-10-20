@@ -76,10 +76,13 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
     return Scaffold(
 
       appBar: AppBar(
-  
+
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
+          icon: Icon(
+            Icons.arrow_back,
+            color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
+          ),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -252,7 +255,7 @@ class _SignupScreenState extends ConsumerState<SignupScreen> {
                         child: Text(
                           'Sign In',
                           style: TextStyle(
-                            color: AppColors.lightPrimary,
+                            color: isDarkMode ? AppColors.darkSecondary : AppColors.lightPrimary,
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
                           ),

@@ -155,25 +155,28 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
                 const SizedBox(height: 12),
 
-                // Forgot Password
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: _isLoading
-                        ? null
-                        : () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => const ForgotPasswordScreen(),
-                              ),
-                            );
-                          },
-                    child: Text(
-                      'Forgot Password?',
-                      style: TextStyle(
-                        color: AppColors.lightPrimary,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
+                // Forgot Password (hidden)
+                Visibility(
+                  visible: false,
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: TextButton(
+                      onPressed: _isLoading
+                          ? null
+                          : () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => const ForgotPasswordScreen(),
+                                ),
+                              );
+                            },
+                      child: Text(
+                        'Forgot Password?',
+                        style: TextStyle(
+                          color: AppColors.lightPrimary,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   ),
@@ -185,54 +188,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   text: 'Sign In',
                   onPressed: _handleLogin,
                   isLoading: _isLoading,
-                ),
-                const SizedBox(height: 24),
-
-                // Divider
-                Row(
-                  children: [
-                    Expanded(child: Divider(color: Colors.grey[300])),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Text(
-                        'OR',
-                        style: TextStyle(
-                          color: isDarkMode ? AppColors.darkTextSecondary : AppColors.textSecondary,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ),
-                    Expanded(child: Divider(color: Colors.grey[300])),
-                  ],
-                ),
-                const SizedBox(height: 24),
-
-                // Biometric Login
-                Container(
-                  width: double.infinity,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey[300]!),
-                    borderRadius: BorderRadius.circular(25),
-                  ),
-                  child: TextButton.icon(
-                    onPressed: () {
-                      // TODO: Implement biometric authentication
-                    },
-                    icon: Icon(
-                      Icons.fingerprint,
-                      color: AppColors.lightPrimary,
-                      size: 24,
-                    ),
-                    label: Text(
-                      'Use Biometric',
-                      style: TextStyle(
-                        color: AppColors.lightPrimary,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
                 ),
                 const SizedBox(height: 32),
 
@@ -266,7 +221,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         child: Text(
                           'Sign Up',
                           style: TextStyle(
-                            color: AppColors.lightPrimary,
+                            color: isDarkMode ? AppColors.darkSecondary : AppColors.lightPrimary,
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
                           ),

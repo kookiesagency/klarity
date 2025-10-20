@@ -27,6 +27,8 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+
     return TextFormField(
       controller: controller,
       keyboardType: keyboardType,
@@ -39,34 +41,46 @@ class CustomTextField extends StatelessWidget {
         ),
         suffixIcon: suffixIcon,
         filled: true,
-        fillColor: Colors.grey[100],
+        fillColor: isDarkMode ? AppColors.darkSurfaceVariant : Colors.grey[100],
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(25),
-          borderSide: BorderSide.none,
+          borderSide: BorderSide(
+            color: isDarkMode
+                ? AppColors.darkOnSurface.withOpacity(0.3)
+                : Colors.grey[300]!,
+            width: 1.5,
+          ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(25),
-          borderSide: BorderSide.none,
+          borderSide: BorderSide(
+            color: isDarkMode
+                ? AppColors.darkOnSurface.withOpacity(0.3)
+                : Colors.grey[300]!,
+            width: 1.5,
+          ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(25),
           borderSide: BorderSide(
-            color: AppColors.lightPrimary.withOpacity(0.3),
-            width: 1,
+            color: isDarkMode
+                ? AppColors.darkPrimary
+                : AppColors.lightPrimary,
+            width: 2,
           ),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(25),
           borderSide: BorderSide(
             color: Colors.red.withOpacity(0.5),
-            width: 1,
+            width: 1.5,
           ),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(25),
           borderSide: BorderSide(
             color: Colors.red,
-            width: 1,
+            width: 2,
           ),
         ),
         contentPadding: const EdgeInsets.symmetric(

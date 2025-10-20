@@ -380,7 +380,7 @@ class _DetailRow extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.grey[50],
+        color: isDarkMode ? const Color(0xFF2A2A2A) : Colors.grey[50],
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -406,7 +406,7 @@ class _DetailRow extends StatelessWidget {
                   label,
                   style: TextStyle(
                     fontSize: 12,
-                    color: Colors.grey[600],
+                    color: isDarkMode ? Colors.grey[400] : Colors.grey[600],
                   ),
                 ),
                 const SizedBox(height: 4),

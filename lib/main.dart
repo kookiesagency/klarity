@@ -58,6 +58,17 @@ class MyApp extends ConsumerWidget {
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,
 
+      // Add global builder to dismiss keyboard on tap outside
+      builder: (context, child) {
+        return GestureDetector(
+          onTap: () {
+            // Dismiss keyboard when tapping outside
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
+          child: child,
+        );
+      },
+
       // Home screen based on auth state
       home: _getHomeScreen(authState),
     );

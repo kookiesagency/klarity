@@ -29,7 +29,7 @@ class _MainNavigationState extends State<MainNavigation> {
     _NavItem(icon: Icons.home_rounded, label: 'Home'),
     _NavItem(icon: Icons.receipt_long_rounded, label: 'Transactions'),
     _NavItem(icon: Icons.analytics_rounded, label: 'Analytics'),
-    _NavItem(icon: Icons.person_rounded, label: 'Profile'),
+    _NavItem(icon: Icons.settings_rounded, label: 'Settings'),
   ];
 
   @override
