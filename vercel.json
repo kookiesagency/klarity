@@ -1,4 +1,6 @@
 {
+  "buildCommand": "echo 'Deploying Flutter Web App'",
+  "outputDirectory": "build/web",
   "rewrites": [
     {
       "source": "/(.*)",
