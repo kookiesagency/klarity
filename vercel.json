@@ -1,6 +1,4 @@
 {
-  "buildCommand": "echo 'Using pre-built files'",
-  "outputDirectory": "build/web",
   "rewrites": [
     {
       "source": "/(.*)",
