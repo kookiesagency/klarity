@@ -39,7 +39,16 @@
       "Bash(git merge feature/new-color-scheme)",
       "Bash(nc localhost 53456)",
       "Bash(git add lib/features/documentation/ lib/features/auth/ lib/features/settings/ lib/features/home/ lib/features/transactions/ lib/core/widgets/main_navigation.dart lib/main.dart)",
-      "Bash(git add .claude/settings.local.json ios/Runner.xcodeproj/project.pbxproj ios/Runner/Info.plist)"
+      "Bash(git add .claude/settings.local.json ios/Runner.xcodeproj/project.pbxproj ios/Runner/Info.plist)",
+      "Bash(flutter config:*)",
+      "Bash(flutter create:*)",
+      "Bash(flutter build:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(curl -s https://finance-tracking-coral.vercel.app/)",
+      "Bash(git remote set-url:*)",
+      "Bash(curl:*)",
+      "Bash(test:*)"
     ],
     "deny": [],
     "ask": []
