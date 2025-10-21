@@ -422,83 +422,92 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
               ),
               const SizedBox(height: 28),
 
-              // PIN Input Boxes
-              GestureDetector(
-                onTap: () {
-                  // Focus the hidden text field when boxes are tapped
-                  FocusScope.of(context).requestFocus(_pinFocusNode);
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(4, (index) {
-                    final pin = _pinController.text.replaceAll(' ', '');
-                    final isFilled = index < pin.length;
-                    final isActive = index == pin.length;
+              // PIN Input Boxes with hidden TextField
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  // PIN Input Boxes
+                  GestureDetector(
+                    onTap: () {
+                      // Focus the hidden text field when boxes are tapped
+                      FocusScope.of(context).requestFocus(_pinFocusNode);
+                    },
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(4, (index) {
+                        final pin = _pinController.text.replaceAll(' ', '');
+                        final isFilled = index < pin.length;
+                        final isActive = index == pin.length;
 
-                    return Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 8),
-                      width: 60,
-                      height: 70,
-                      decoration: BoxDecoration(
-                        color: isDarkMode
-                            ? AppColors.darkSurfaceVariant
-                            : Colors.grey[50],
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(
-                          color: _hasError
-                              ? Colors.red
-                              : isActive
-                                  ? AppColors.lightPrimary
-                                  : (isDarkMode
-                                      ? AppColors.darkOnSurface.withOpacity(0.3)
-                                      : Colors.grey[300]!),
-                          width: isActive ? 2 : 1.5,
+                        return Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 8),
+                          width: 60,
+                          height: 70,
+                          decoration: BoxDecoration(
+                            color: isDarkMode
+                                ? AppColors.darkSurfaceVariant
+                                : Colors.grey[50],
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: _hasError
+                                  ? Colors.red
+                                  : isActive
+                                      ? AppColors.lightPrimary
+                                      : (isDarkMode
+                                          ? AppColors.darkOnSurface.withOpacity(0.3)
+                                          : Colors.grey[300]!),
+                              width: isActive ? 2 : 1.5,
+                            ),
+                          ),
+                          child: Center(
+                            child: isFilled
+                                ? Icon(
+                                    Icons.circle,
+                                    size: 16,
+                                    color: isDarkMode
+                                        ? AppColors.darkPrimary.withOpacity(0.8)
+                                        : AppColors.lightPrimary,
+                                  )
+                                : null,
+                          ),
+                        );
+                      }),
+                    ),
+                  ),
+
+                  // Hidden TextField for keyboard input - positioned off-screen
+                  Positioned(
+                    left: -9999,
+                    child: SizedBox(
+                      width: 1,
+                      height: 1,
+                      child: TextField(
+                        controller: _pinController,
+                        focusNode: _pinFocusNode,
+                        enabled: !_isLoading && !_isPinVerified,
+                        keyboardType: TextInputType.number,
+                        maxLength: 7, // 4 digits + 3 spaces
+                        autofocus: true,
+                        showCursor: false,
+                        style: const TextStyle(
+                          color: Colors.transparent,
+                          fontSize: 1,
                         ),
+                        decoration: const InputDecoration(
+                          border: InputBorder.none,
+                          counterText: '',
+                          contentPadding: EdgeInsets.zero,
+                          filled: false,
+                        ),
+                        onChanged: _onPinChanged,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                          PinInputFormatter(),
+                        ],
                       ),
-                      child: Center(
-                        child: isFilled
-                            ? Icon(
-                                Icons.circle,
-                                size: 16,
-                                color: isDarkMode
-                                    ? AppColors.darkPrimary.withOpacity(0.8)
-                                    : AppColors.lightPrimary,
-                              )
-                            : null,
-                      ),
-                    );
-                  }),
-                ),
-              ),
-
-              // Hidden TextField for keyboard input
-              SizedBox(
-                width: 1,
-                height: 1,
-                child: TextField(
-                  controller: _pinController,
-                  focusNode: _pinFocusNode,
-                  enabled: !_isLoading && !_isPinVerified,
-                  keyboardType: TextInputType.number,
-                  maxLength: 7, // 4 digits + 3 spaces
-                  autofocus: true,
-                  showCursor: false,
-                  style: const TextStyle(
-                    color: Colors.transparent,
-                    fontSize: 1,
+                    ),
                   ),
-                  decoration: const InputDecoration(
-                    border: InputBorder.none,
-                    counterText: '',
-                    contentPadding: EdgeInsets.zero,
-                    filled: false,
-                  ),
-                  onChanged: _onPinChanged,
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    PinInputFormatter(),
-                  ],
-                ),
+                ],
               ),
 
               const SizedBox(height: 24),
