@@ -472,38 +472,32 @@ class _PinEntryScreenState extends ConsumerState<PinEntryScreen> {
               ),
 
               // Hidden TextField for keyboard input
-              Opacity(
-                opacity: 0.0,
-                child: SizedBox(
-                  width: 0.1,
-                  height: 0.1,
-                  child: TextField(
-                    controller: _pinController,
-                    focusNode: _pinFocusNode,
-                    enabled: !_isLoading && !_isPinVerified,
-                    keyboardType: TextInputType.number,
-                    maxLength: 7, // 4 digits + 3 spaces
-                    autofocus: true,
-                    showCursor: false,
-                    cursorWidth: 0,
-                    cursorHeight: 0,
-                    cursorColor: Colors.transparent,
-                    style: const TextStyle(
-                      color: Colors.transparent,
-                      fontSize: 0.1,
-                      height: 0.1,
-                    ),
-                    decoration: const InputDecoration(
-                      border: InputBorder.none,
-                      counterText: '',
-                      contentPadding: EdgeInsets.zero,
-                    ),
-                    onChanged: _onPinChanged,
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                      PinInputFormatter(),
-                    ],
+              SizedBox(
+                width: 1,
+                height: 1,
+                child: TextField(
+                  controller: _pinController,
+                  focusNode: _pinFocusNode,
+                  enabled: !_isLoading && !_isPinVerified,
+                  keyboardType: TextInputType.number,
+                  maxLength: 7, // 4 digits + 3 spaces
+                  autofocus: true,
+                  showCursor: false,
+                  style: const TextStyle(
+                    color: Colors.transparent,
+                    fontSize: 1,
                   ),
+                  decoration: const InputDecoration(
+                    border: InputBorder.none,
+                    counterText: '',
+                    contentPadding: EdgeInsets.zero,
+                    filled: false,
+                  ),
+                  onChanged: _onPinChanged,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    PinInputFormatter(),
+                  ],
                 ),
               ),
 
