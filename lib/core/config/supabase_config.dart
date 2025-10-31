@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../constants/api_constants.dart';
 
@@ -23,7 +24,10 @@ class SupabaseConfig {
     await Supabase.initialize(
       url: ApiConstants.supabaseUrl,
       anonKey: ApiConstants.supabaseAnonKey,
-      // ⭐ Use defaults - Supabase handles auto-refresh and persistence automatically!
+      authOptions: const FlutterAuthClientOptions(
+        autoRefreshToken: true,
+      ),
+      debug: kDebugMode,
     );
 
     _client = Supabase.instance.client;

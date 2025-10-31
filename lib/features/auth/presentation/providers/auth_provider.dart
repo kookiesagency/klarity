@@ -67,6 +67,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> _checkAuthStatus() async {
     state = const AuthLoading();
 
+    await SupabaseConfig.ensureValidSession();
+
     final result = await _authRepository.getCurrentUser();
     result.fold(
       onSuccess: (user) {

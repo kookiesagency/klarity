@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../../core/config/supabase_config.dart';
 import 'pin_verification_provider.dart';
 
 /// Provider for tracking app lifecycle state
@@ -62,6 +65,7 @@ class AppLifecycleNotifier extends StateNotifier<AppLifecycleState> with Widgets
       case AppLifecycleState.resumed:
         // App came back to foreground
         print('📱 App resumed');
+        unawaited(SupabaseConfig.ensureValidSession());
         _checkAutoLock();
         break;
 
