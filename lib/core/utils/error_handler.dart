@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'exceptions.dart' as app_exceptions;
+import '../config/supabase_config.dart';
 
 /// Error handler to convert various errors to app exceptions
 class ErrorHandler {
@@ -32,6 +35,12 @@ class ErrorHandler {
 
     // Handle by checking error message string
     final errorString = error.toString().toLowerCase();
+
+    // Session/auth corruption errors -> auto sign out
+    if (_isSessionCorruption(errorString)) {
+      _triggerSessionReset();
+      return app_exceptions.AuthException.sessionExpired();
+    }
 
     // Auth-related errors
     if (errorString.contains('invalid') && errorString.contains('credentials')) {
@@ -71,6 +80,21 @@ class ErrorHandler {
 
     // Default to unknown exception
     return app_exceptions.UnknownException.generic();
+  }
+
+  static bool _isSessionCorruption(String errorString) {
+    return errorString.contains('oauth_client_id') ||
+        errorString.contains('unexpected_failure') ||
+        errorString.contains('session') && errorString.contains('expired') ||
+        errorString.contains('jwt') && errorString.contains('expired');
+  }
+
+  static void _triggerSessionReset() {
+    try {
+      unawaited(SupabaseConfig.signOut());
+    } catch (_) {
+      // ignore sign-out failures here; auth listener will handle navigation
+    }
   }
 
   /// Handle Supabase AuthException
