@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../core/config/supabase_config.dart';
+import '../../../../core/services/recurring_transaction_service.dart';
 import 'pin_verification_provider.dart';
+import '../../../scheduled_payments/presentation/providers/scheduled_payment_provider.dart';
 
 /// Provider for tracking app lifecycle state
 final appLifecycleProvider = StateNotifierProvider<AppLifecycleNotifier, AppLifecycleState>(
@@ -17,10 +19,14 @@ class AppLifecycleNotifier extends StateNotifier<AppLifecycleState> with Widgets
   DateTime? _backgroundTime;
   Duration _autoLockDuration = Duration.zero; // Default: lock immediately
   static const String _autoLockDurationKey = 'auto_lock_duration_seconds';
+  DateTime? _lastDailyProcessDate;
+  bool _isProcessingDailyTasks = false;
 
   AppLifecycleNotifier(this._ref) : super(AppLifecycleState.resumed) {
     WidgetsBinding.instance.addObserver(this);
     _loadAutoLockDuration();
+    // Run daily jobs shortly after startup
+    Future.microtask(_processDailyTasks);
   }
 
   /// Load auto-lock duration from settings
@@ -67,6 +73,7 @@ class AppLifecycleNotifier extends StateNotifier<AppLifecycleState> with Widgets
         print('📱 App resumed');
         unawaited(SupabaseConfig.ensureValidSession());
         _checkAutoLock();
+        unawaited(_processDailyTasks());
         break;
 
       case AppLifecycleState.detached:
@@ -100,6 +107,76 @@ class AppLifecycleNotifier extends StateNotifier<AppLifecycleState> with Widgets
     }
 
     _backgroundTime = null;
+  }
+
+  Future<void> _processDailyTasks() async {
+    if (_isProcessingDailyTasks) return;
+    _isProcessingDailyTasks = true;
+
+    try {
+      final now = DateTime.now();
+      final today = DateTime(now.year, now.month, now.day);
+
+      if (_lastDailyProcessDate != null) {
+        final last = DateTime(
+          _lastDailyProcessDate!.year,
+          _lastDailyProcessDate!.month,
+          _lastDailyProcessDate!.day,
+        );
+        if (last == today) {
+          _isProcessingDailyTasks = false;
+          return;
+        }
+      }
+
+      await _processRecurringTransactions();
+      await _processScheduledPayments();
+
+      _lastDailyProcessDate = today;
+    } catch (e) {
+      print('⚠️ Failed to process daily tasks: $e');
+    } finally {
+      _isProcessingDailyTasks = false;
+    }
+  }
+
+  Future<void> _processRecurringTransactions() async {
+    try {
+      final service = _ref.read(recurringTransactionServiceProvider);
+      final result = await service.processDueRecurringTransactions();
+
+      result.fold(
+        onSuccess: (processingResult) {
+          print('🔄 Recurring processing: ${processingResult.message}');
+        },
+        onFailure: (exception) {
+          print('⚠️ Recurring processing failed: ${exception.message}');
+        },
+      );
+    } catch (e) {
+      print('⚠️ Recurring processing error: $e');
+    }
+  }
+
+  Future<void> _processScheduledPayments() async {
+    try {
+      final result = await _ref.read(scheduledPaymentProvider.notifier).processDuePayments();
+
+      result.fold(
+        onSuccess: (count) {
+          if (count > 0) {
+            print('✅ Processed $count scheduled payment(s)');
+          } else {
+            print('ℹ️ No scheduled payments due today');
+          }
+        },
+        onFailure: (exception) {
+          print('⚠️ Scheduled payments processing failed: ${exception.message}');
+        },
+      );
+    } catch (e) {
+      print('⚠️ Scheduled payments processing error: $e');
+    }
   }
 
   /// Update auto-lock duration (can be called from settings)
