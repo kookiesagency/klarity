@@ -99,37 +99,42 @@ class _CategoryFormScreenState extends ConsumerState<CategoryFormScreen> {
 
     result.fold(
       onSuccess: (category) async {
-        // Save budget if this is an expense category and budget is enabled
-        if (_selectedType == CategoryType.expense && _enableBudget) {
-          final budgetAmount = double.tryParse(_budgetAmountController.text);
-          final alertThreshold = int.tryParse(_budgetThresholdController.text) ?? 80;
+        try {
+          // Save budget if this is an expense category and budget is enabled
+          if (_selectedType == CategoryType.expense && _enableBudget) {
+            final budgetAmount = double.tryParse(_budgetAmountController.text);
+            final alertThreshold = int.tryParse(_budgetThresholdController.text) ?? 80;
 
-          if (budgetAmount != null && budgetAmount > 0) {
+            if (budgetAmount != null && budgetAmount > 0) {
+              final existingBudget = ref.read(budgetProvider.notifier).getBudgetForCategory(category.id);
+
+              if (existingBudget != null) {
+                // Update existing budget
+                await ref.read(budgetProvider.notifier).updateBudget(
+                      budgetId: existingBudget.id,
+                      amount: budgetAmount,
+                      alertThreshold: alertThreshold,
+                    );
+              } else {
+                // Create new budget
+                await ref.read(budgetProvider.notifier).createBudget(
+                      categoryId: category.id,
+                      amount: budgetAmount,
+                      period: BudgetPeriod.monthly,
+                      alertThreshold: alertThreshold,
+                    );
+              }
+            }
+          } else if (_selectedType == CategoryType.expense && !_enableBudget && isEditing) {
+            // Delete budget if it exists but budget is now disabled (only when editing)
             final existingBudget = ref.read(budgetProvider.notifier).getBudgetForCategory(category.id);
-
             if (existingBudget != null) {
-              // Update existing budget
-              await ref.read(budgetProvider.notifier).updateBudget(
-                    budgetId: existingBudget.id,
-                    amount: budgetAmount,
-                    alertThreshold: alertThreshold,
-                  );
-            } else {
-              // Create new budget
-              await ref.read(budgetProvider.notifier).createBudget(
-                    categoryId: category.id,
-                    amount: budgetAmount,
-                    period: BudgetPeriod.monthly,
-                    alertThreshold: alertThreshold,
-                  );
+              await ref.read(budgetProvider.notifier).deleteBudget(existingBudget.id);
             }
           }
-        } else if (_selectedType == CategoryType.expense && !_enableBudget) {
-          // Delete budget if it exists but budget is now disabled
-          final existingBudget = ref.read(budgetProvider.notifier).getBudgetForCategory(widget.category!.id);
-          if (existingBudget != null) {
-            await ref.read(budgetProvider.notifier).deleteBudget(existingBudget.id);
-          }
+        } catch (e) {
+          // If budget operation fails, log but continue with success
+          debugPrint('Budget operation failed: $e');
         }
 
         if (!mounted) return;

@@ -62,8 +62,9 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final activeProfile = ref.read(activeProfileProvider);
       if (activeProfile != null) {
-        ref.read(accountProvider.notifier).loadAccounts(activeProfile.id);
-        ref.read(categoryProvider.notifier).loadCategories(activeProfile.id);
+        // Load accounts and categories first
+        await ref.read(accountProvider.notifier).loadAccounts(activeProfile.id);
+        await ref.read(categoryProvider.notifier).loadCategories(activeProfile.id);
       }
 
       // Load transaction by ID if provided
@@ -91,6 +92,34 @@ class _TransactionFormScreenState extends ConsumerState<TransactionFormScreen> {
     _descriptionController.text = transaction.description ?? '';
     _selectedType = transaction.type;
     _selectedDate = transaction.transactionDate;
+
+    // Set selected account and category based on IDs
+    setState(() {
+      // Find and set account
+      final accountState = ref.read(accountProvider);
+      try {
+        _selectedAccount = accountState.accounts.firstWhere(
+          (account) => account.id == transaction.accountId,
+        );
+      } catch (e) {
+        // If account not found, use first available account or null
+        _selectedAccount = accountState.accounts.isNotEmpty ? accountState.accounts.first : null;
+      }
+
+      // Find and set category
+      final categoryState = ref.read(categoryProvider);
+      final categories = transaction.type == TransactionType.income
+          ? categoryState.incomeCategories
+          : categoryState.expenseCategories;
+      try {
+        _selectedCategory = categories.firstWhere(
+          (category) => category.id == transaction.categoryId,
+        );
+      } catch (e) {
+        // If category not found, use first available category or null
+        _selectedCategory = categories.isNotEmpty ? categories.first : null;
+      }
+    });
   }
 
   @override

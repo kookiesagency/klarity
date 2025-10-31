@@ -80,6 +80,38 @@ class CategoryRepository {
     bool isDefault = false,
   }) async {
     try {
+      // Check if category with same name exists but is inactive
+      final existingResponse = await _supabase
+          .from(ApiConstants.categoriesTable)
+          .select()
+          .eq('profile_id', profileId)
+          .eq('name', name)
+          .eq('type', type.value)
+          .maybeSingle();
+
+      // If inactive category exists, reactivate it with new icon/color
+      if (existingResponse != null) {
+        final existingCategory = CategoryModel.fromJson(existingResponse);
+
+        // Reactivate and update the existing category
+        final reactivatedResponse = await _supabase
+            .from(ApiConstants.categoriesTable)
+            .update({
+              'is_active': true,
+              'icon': icon,
+              'color_hex': colorHex,
+              'is_default': isDefault,
+              'updated_at': DateTime.now().toIso8601String(),
+            })
+            .eq('id', existingCategory.id)
+            .select()
+            .single();
+
+        final category = CategoryModel.fromJson(reactivatedResponse);
+        return Success(category);
+      }
+
+      // If no existing category, create new one
       final response = await _supabase
           .from(ApiConstants.categoriesTable)
           .insert({

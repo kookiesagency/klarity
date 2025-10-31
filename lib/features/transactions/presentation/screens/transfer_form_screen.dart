@@ -263,10 +263,11 @@ class _TransferFormScreenState extends ConsumerState<TransferFormScreen> {
 
     result.fold(
       onSuccess: (_) {
-        // Reload accounts to update balances
+        // Reload accounts to update balances and transactions to show new records
         final activeProfile = ref.read(activeProfileProvider);
         if (activeProfile != null) {
           ref.read(accountProvider.notifier).loadAccounts(activeProfile.id);
+          ref.read(transactionProvider.notifier).loadTransactions(activeProfile.id);
         }
         context.showSuccessSnackBar('Transfer completed successfully');
         Navigator.pop(context, true);

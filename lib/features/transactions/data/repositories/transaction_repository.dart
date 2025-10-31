@@ -373,6 +373,72 @@ class TransactionRepository {
     required DateTime transferDate,
   }) async {
     try {
+      // Step 1: Get or create "Transfer" category for both income and expense
+      final transferCategoryName = 'Transfer';
+
+      // Get expense "Transfer" category or create it
+      final expenseCategoryResponse = await _supabase
+          .from(ApiConstants.categoriesTable)
+          .select()
+          .eq('profile_id', profileId)
+          .eq('name', transferCategoryName)
+          .eq('type', 'expense')
+          .eq('is_active', true)
+          .maybeSingle();
+
+      String expenseCategoryId;
+      if (expenseCategoryResponse == null) {
+        // Create expense transfer category
+        final newExpenseCategory = await _supabase
+            .from(ApiConstants.categoriesTable)
+            .insert({
+              'profile_id': profileId,
+              'name': transferCategoryName,
+              'type': 'expense',
+              'icon': '💸',
+              'color_hex': '#6B7280',
+              'is_default': true,
+              'is_active': true,
+            })
+            .select()
+            .single();
+        expenseCategoryId = newExpenseCategory['id'] as String;
+      } else {
+        expenseCategoryId = expenseCategoryResponse['id'] as String;
+      }
+
+      // Get income "Transfer" category or create it
+      final incomeCategoryResponse = await _supabase
+          .from(ApiConstants.categoriesTable)
+          .select()
+          .eq('profile_id', profileId)
+          .eq('name', transferCategoryName)
+          .eq('type', 'income')
+          .eq('is_active', true)
+          .maybeSingle();
+
+      String incomeCategoryId;
+      if (incomeCategoryResponse == null) {
+        // Create income transfer category
+        final newIncomeCategory = await _supabase
+            .from(ApiConstants.categoriesTable)
+            .insert({
+              'profile_id': profileId,
+              'name': transferCategoryName,
+              'type': 'income',
+              'icon': '💸',
+              'color_hex': '#6B7280',
+              'is_default': true,
+              'is_active': true,
+            })
+            .select()
+            .single();
+        incomeCategoryId = newIncomeCategory['id'] as String;
+      } else {
+        incomeCategoryId = incomeCategoryResponse['id'] as String;
+      }
+
+      // Step 2: Create the transfer record
       final response = await _supabase
           .from(ApiConstants.transfersTable)
           .insert({
@@ -395,6 +461,37 @@ class TransactionRepository {
         'from_account_name': response['from_account']?['name'],
         'to_account_name': response['to_account']?['name'],
       });
+
+      // Step 3: Create two linked transactions (expense from source, income to destination)
+      final transferDescription = description ?? 'Transfer';
+
+      // Create expense transaction (money out from source account)
+      await _supabase
+          .from(ApiConstants.transactionsTable)
+          .insert({
+            'profile_id': profileId,
+            'account_id': fromAccountId,
+            'category_id': expenseCategoryId,
+            'type': 'expense',
+            'amount': amount,
+            'description': transferDescription,
+            'transaction_date': transferDate.toIso8601String(),
+            'is_locked': false,
+          });
+
+      // Create income transaction (money in to destination account)
+      await _supabase
+          .from(ApiConstants.transactionsTable)
+          .insert({
+            'profile_id': profileId,
+            'account_id': toAccountId,
+            'category_id': incomeCategoryId,
+            'type': 'income',
+            'amount': amount,
+            'description': transferDescription,
+            'transaction_date': transferDate.toIso8601String(),
+            'is_locked': false,
+          });
 
       return Success(transfer);
     } catch (e, stackTrace) {
