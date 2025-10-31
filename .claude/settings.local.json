@@ -48,7 +48,11 @@
       "Bash(curl -s https://finance-tracking-coral.vercel.app/)",
       "Bash(git remote set-url:*)",
       "Bash(curl:*)",
-      "Bash(test:*)"
+      "Bash(test:*)",
+      "Bash(git fetch:*)",
+      "Bash(cat:*)",
+      "Bash(pkill:*)",
+      "Bash(git push:*)"
     ],
     "deny": [],
     "ask": []

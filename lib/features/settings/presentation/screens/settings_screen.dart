@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../../../core/theme/app_theme.dart';
-import '../../../../core/theme/theme_provider.dart';
 import '../../../../core/utils/extensions.dart';
 import '../../../auth/presentation/providers/auth_provider.dart';
 import '../../../profile/presentation/providers/profile_provider.dart';
@@ -26,7 +24,6 @@ class SettingsScreen extends ConsumerStatefulWidget {
 
 class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   bool _isEnablingBiometric = false;
-  bool _isTogglingTheme = false;
 
   @override
   void initState() {
@@ -74,18 +71,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
         }
       },
     );
-  }
-
-  Future<void> _toggleDarkMode(bool value) async {
-    setState(() => _isTogglingTheme = true);
-
-    await ref.read(themeProvider.notifier).setThemeMode(
-          value ? AppThemeMode.dark : AppThemeMode.light,
-        );
-
-    if (mounted) {
-      setState(() => _isTogglingTheme = false);
-    }
   }
 
   Future<void> _handleSignOut() async {
@@ -156,8 +141,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final user = ref.watch(currentUserProvider);
-    final themeNotifier = ref.watch(themeProvider.notifier);
-    final isDarkMode = themeNotifier.isDarkMode;
     final isBiometricAvailableFuture = ref.watch(isBiometricAvailableProvider);
 
     final isDarkTheme = Theme.of(context).brightness == Brightness.dark;
@@ -318,45 +301,6 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
                         Icons.error_outline,
                         color: Colors.red,
                       ),
-                    ),
-                  ),
-
-                  const SizedBox(height: 32),
-
-                  // Appearance Section
-                  Text(
-                    'Appearance',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: isDarkTheme
-                          ? AppColors.darkTextPrimary
-                          : AppColors.textPrimary,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-
-                  // Theme Toggle
-                  _SettingsTile(
-                    icon: Icons.dark_mode_outlined,
-                    title: 'Dark Mode',
-                    subtitle: isDarkTheme ? 'Enabled' : 'Disabled',
-                    trailing: SizedBox(
-                      width: 51,
-                      height: 31,
-                      child: _isTogglingTheme
-                          ? const Center(
-                              child: SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(strokeWidth: 2),
-                              ),
-                            )
-                          : Switch(
-                              value: isDarkTheme,
-                              onChanged: _toggleDarkMode,
-                              activeColor: AppColors.lightPrimary,
-                            ),
                     ),
                   ),
 
