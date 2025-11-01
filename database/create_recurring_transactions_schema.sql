@@ -146,13 +146,14 @@ DECLARE
     v_created_count INT := 0;
     v_processed_ids UUID[] := ARRAY[]::UUID[];
     v_next_due TIMESTAMPTZ;
+    v_local_today DATE := (NOW() AT TIME ZONE 'Asia/Kolkata')::DATE;
 BEGIN
-    -- Find all active recurring transactions that are due today
+    -- Find all active recurring transactions that are due today (Asia/Kolkata)
     FOR v_rec IN
         SELECT * FROM public.recurring_transactions
         WHERE is_active = true
-        AND DATE(next_due_date) <= CURRENT_DATE
-        AND (end_date IS NULL OR end_date >= NOW())
+        AND (next_due_date AT TIME ZONE 'Asia/Kolkata')::DATE <= v_local_today
+        AND (end_date IS NULL OR (end_date AT TIME ZONE 'Asia/Kolkata')::DATE >= v_local_today)
     LOOP
         -- Create a new transaction
         INSERT INTO public.transactions (
@@ -163,7 +164,6 @@ BEGIN
             amount,
             description,
             transaction_date,
-            notes,
             is_locked
         ) VALUES (
             v_rec.profile_id,
@@ -173,7 +173,6 @@ BEGIN
             v_rec.amount,
             v_rec.description || ' (Recurring)',
             v_rec.next_due_date,
-            v_rec.notes,
             false
         );
 
@@ -198,7 +197,9 @@ BEGIN
         WHERE id = v_rec.id;
 
         -- If end_date is reached, mark as inactive
-        IF v_rec.end_date IS NOT NULL AND v_next_due > v_rec.end_date THEN
+        IF v_rec.end_date IS NOT NULL
+           AND (v_next_due AT TIME ZONE 'Asia/Kolkata')::DATE >
+               (v_rec.end_date AT TIME ZONE 'Asia/Kolkata')::DATE THEN
             UPDATE public.recurring_transactions
             SET is_active = false,
                 updated_at = NOW()
