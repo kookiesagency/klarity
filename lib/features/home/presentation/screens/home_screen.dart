@@ -71,6 +71,27 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     // Data will be loaded automatically by providers listening to profile changes
   }
 
+  /// Refresh all data on pull-to-refresh
+  Future<void> _refreshData() async {
+    final activeProfile = ref.read(activeProfileProvider);
+    if (activeProfile == null) return;
+
+    await Future.wait([
+      ref.read(accountProvider.notifier).loadAccounts(activeProfile.id),
+      _selectedAccountId == null
+          ? ref.read(transactionProvider.notifier).loadTransactions(activeProfile.id)
+          : ref.read(transactionProvider.notifier).loadTransactionsByAccount(
+              profileId: activeProfile.id,
+              accountId: _selectedAccountId!,
+            ),
+      ref.read(recurringTransactionProvider.notifier).loadRecurringTransactions(activeProfile.id),
+      ref.read(emiProvider.notifier).loadEmis(activeProfile.id),
+      ref.read(budgetProvider.notifier).loadBudgets(activeProfile.id),
+      ref.read(scheduledPaymentProvider.notifier).loadScheduledPayments(activeProfile.id),
+      ref.read(categoryProvider.notifier).loadCategories(activeProfile.id),
+    ]);
+  }
+
   /// Reload data when account filter changes
   Future<void> _reloadDataForAccount(String? accountId) async {
     final activeProfile = ref.read(activeProfileProvider);
@@ -382,11 +403,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             // Header with balance
             _buildHeader(context, activeProfile),
 
-            // Content
+            // Content with RefreshIndicator
             Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(20),
-                child: Column(
+              child: RefreshIndicator(
+                onRefresh: _refreshData,
+                color: AppColors.primary,
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(20),
+                  physics: const AlwaysScrollableScrollPhysics(), // Enable pull-to-refresh even when content is short
+                  child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Income & Outcome Summary with Filter
@@ -724,6 +749,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
               ),
             ),
+          ),
           ],
         ),
       ),
