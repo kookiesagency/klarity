@@ -7,6 +7,13 @@ import '../../../../core/config/supabase_config.dart';
 import '../../../../core/services/recurring_transaction_service.dart';
 import 'pin_verification_provider.dart';
 import '../../../scheduled_payments/presentation/providers/scheduled_payment_provider.dart';
+import '../../../profile/presentation/providers/profile_provider.dart';
+import '../../../accounts/presentation/providers/account_provider.dart';
+import '../../../transactions/presentation/providers/transaction_provider.dart';
+import '../../../transactions/presentation/providers/recurring_transaction_provider.dart';
+import '../../../transactions/presentation/providers/emi_provider.dart';
+import '../../../budgets/presentation/providers/budget_provider.dart';
+import '../../../categories/presentation/providers/category_provider.dart';
 
 /// Provider for tracking app lifecycle state
 final appLifecycleProvider = StateNotifierProvider<AppLifecycleNotifier, AppLifecycleState>(
@@ -125,18 +132,61 @@ class AppLifecycleNotifier extends StateNotifier<AppLifecycleState> with Widgets
         );
         if (last == today) {
           _isProcessingDailyTasks = false;
+          // Still refresh data on app resume even if already processed today
+          await _refreshAllData();
           return;
         }
       }
 
+      print('🔄 Processing daily tasks...');
       await _processRecurringTransactions();
       await _processScheduledPayments();
 
       _lastDailyProcessDate = today;
+
+      // Refresh all data after processing
+      print('🔄 Refreshing all data after processing...');
+      await _refreshAllData();
+      print('✅ Daily tasks complete');
     } catch (e) {
       print('⚠️ Failed to process daily tasks: $e');
     } finally {
       _isProcessingDailyTasks = false;
+    }
+  }
+
+  /// Refresh all data providers to show updated information
+  Future<void> _refreshAllData() async {
+    try {
+      final activeProfile = _ref.read(activeProfileProvider);
+      if (activeProfile == null) {
+        print('ℹ️ No active profile, skipping data refresh');
+        return;
+      }
+
+      final profileId = activeProfile.id;
+
+      // Reload all data in parallel for better performance
+      await Future.wait([
+        // Reload accounts
+        _ref.read(accountProvider.notifier).loadAccounts(profileId),
+        // Reload transactions
+        _ref.read(transactionProvider.notifier).loadTransactionsPaginated(profileId, limit: 100),
+        // Reload recurring transactions
+        _ref.read(recurringTransactionProvider.notifier).loadRecurringTransactions(profileId),
+        // Reload EMIs
+        _ref.read(emiProvider.notifier).loadEmis(profileId),
+        // Reload budgets
+        _ref.read(budgetProvider.notifier).loadBudgets(profileId),
+        // Reload scheduled payments
+        _ref.read(scheduledPaymentProvider.notifier).loadScheduledPayments(profileId),
+        // Reload categories
+        _ref.read(categoryProvider.notifier).loadCategories(profileId),
+      ]);
+
+      print('✅ All data refreshed successfully');
+    } catch (e) {
+      print('⚠️ Failed to refresh all data: $e');
     }
   }
 
@@ -193,6 +243,11 @@ class AppLifecycleNotifier extends StateNotifier<AppLifecycleState> with Widgets
 
   /// Get current auto-lock duration
   Duration get autoLockDuration => _autoLockDuration;
+
+  /// Public method to refresh all data (can be called from UI)
+  Future<void> refreshAllData() async {
+    await _refreshAllData();
+  }
 
   /// Common auto-lock durations for settings UI
   static List<Duration> get commonDurations => [

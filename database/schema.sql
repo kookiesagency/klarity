@@ -83,7 +83,6 @@ CREATE TABLE IF NOT EXISTS public.transactions (
     transaction_date TIMESTAMPTZ NOT NULL,
     is_locked BOOLEAN DEFAULT false,
     locked_at TIMESTAMPTZ,
-    notes TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );

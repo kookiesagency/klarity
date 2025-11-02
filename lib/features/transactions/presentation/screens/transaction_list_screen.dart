@@ -12,6 +12,32 @@ import '../widgets/transaction_card.dart';
 import 'transaction_form_screen.dart';
 import 'transaction_detail_screen.dart';
 
+/// Date range filter options for transactions
+enum TransactionDateFilter {
+  allTime,
+  today,
+  thisMonth,
+  thisYear,
+  lastYear,
+}
+
+extension TransactionDateFilterExtension on TransactionDateFilter {
+  String get label {
+    switch (this) {
+      case TransactionDateFilter.allTime:
+        return 'All Time';
+      case TransactionDateFilter.today:
+        return 'Today';
+      case TransactionDateFilter.thisMonth:
+        return 'This Month';
+      case TransactionDateFilter.thisYear:
+        return 'This Year';
+      case TransactionDateFilter.lastYear:
+        return 'Last Year';
+    }
+  }
+}
+
 class TransactionListScreen extends ConsumerStatefulWidget {
   const TransactionListScreen({super.key});
 
@@ -23,6 +49,7 @@ class _TransactionListScreenState extends ConsumerState<TransactionListScreen> {
   String? _filterAccountId;
   String? _filterCategoryId;
   TransactionType? _filterType;
+  TransactionDateFilter _filterDateRange = TransactionDateFilter.allTime;
   DateTime? _filterStartDate;
   DateTime? _filterEndDate;
   bool _isSelectionMode = false;
@@ -107,11 +134,46 @@ class _TransactionListScreenState extends ConsumerState<TransactionListScreen> {
     }
   }
 
+  /// Calculate date range based on selected filter
+  void _applyDateRangeFilter(TransactionDateFilter filter) {
+    final now = DateTime.now();
+
+    switch (filter) {
+      case TransactionDateFilter.allTime:
+        _filterStartDate = null;
+        _filterEndDate = null;
+        break;
+
+      case TransactionDateFilter.today:
+        _filterStartDate = DateTime(now.year, now.month, now.day);
+        _filterEndDate = DateTime(now.year, now.month, now.day, 23, 59, 59);
+        break;
+
+      case TransactionDateFilter.thisMonth:
+        _filterStartDate = DateTime(now.year, now.month, 1);
+        _filterEndDate = DateTime(now.year, now.month + 1, 0, 23, 59, 59);
+        break;
+
+      case TransactionDateFilter.thisYear:
+        _filterStartDate = DateTime(now.year, 1, 1);
+        _filterEndDate = DateTime(now.year, 12, 31, 23, 59, 59);
+        break;
+
+      case TransactionDateFilter.lastYear:
+        _filterStartDate = DateTime(now.year - 1, 1, 1);
+        _filterEndDate = DateTime(now.year - 1, 12, 31, 23, 59, 59);
+        break;
+    }
+
+    _filterDateRange = filter;
+  }
+
   Future<void> _showFilterDialog() async {
     // Store current filter values
     String? tempAccountId = _filterAccountId;
     String? tempCategoryId = _filterCategoryId;
     TransactionType? tempType = _filterType;
+    TransactionDateFilter tempDateRange = _filterDateRange;
 
     await showModalBottomSheet(
       context: context,
@@ -338,6 +400,35 @@ class _TransactionListScreenState extends ConsumerState<TransactionListScreen> {
                                   );
                                 },
                               ),
+                              const SizedBox(height: 24),
+
+                              // Date Range Filter
+                              const Text(
+                                'Date Range',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              Wrap(
+                                spacing: 8,
+                                runSpacing: 8,
+                                children: TransactionDateFilter.values.map((filter) {
+                                  final isSelected = tempDateRange == filter;
+                                  return FilterChip(
+                                    label: Text(filter.label),
+                                    selected: isSelected,
+                                    selectedColor: AppColors.primary.withOpacity(0.2),
+                                    checkmarkColor: AppColors.primary,
+                                    onSelected: (selected) {
+                                      setBottomSheetState(() {
+                                        tempDateRange = filter;
+                                      });
+                                    },
+                                  );
+                                }).toList(),
+                              ),
                               const SizedBox(height: 32),
                             ],
                           ),
@@ -378,6 +469,9 @@ class _TransactionListScreenState extends ConsumerState<TransactionListScreen> {
                                     _filterAccountId = null;
                                     _filterCategoryId = null;
                                     _filterType = null;
+                                    _filterDateRange = TransactionDateFilter.allTime;
+                                    _filterStartDate = null;
+                                    _filterEndDate = null;
                                   });
                                   Navigator.pop(context);
                                 },
@@ -399,6 +493,7 @@ class _TransactionListScreenState extends ConsumerState<TransactionListScreen> {
                                     _filterAccountId = tempAccountId;
                                     _filterCategoryId = tempCategoryId;
                                     _filterType = tempType;
+                                    _applyDateRangeFilter(tempDateRange);
                                   });
                                   Navigator.pop(context);
                                 },
@@ -652,8 +747,7 @@ class _TransactionListScreenState extends ConsumerState<TransactionListScreen> {
     return _filterType != null ||
         _filterAccountId != null ||
         _filterCategoryId != null ||
-        _filterStartDate != null ||
-        _filterEndDate != null;
+        _filterDateRange != TransactionDateFilter.allTime;
   }
 
   Future<void> _showBulkActions() async {
@@ -1110,6 +1204,7 @@ class _TransactionListScreenState extends ConsumerState<TransactionListScreen> {
                   _filterAccountId = null;
                   _filterCategoryId = null;
                   _filterType = null;
+                  _filterDateRange = TransactionDateFilter.allTime;
                   _filterStartDate = null;
                   _filterEndDate = null;
                 });
@@ -1144,6 +1239,15 @@ class _TransactionListScreenState extends ConsumerState<TransactionListScreen> {
     final isLoadingMore = transactionState.isLoadingMore;
     final hasMore = transactionState.hasMore;
 
+    // Check if we should show opening balance (only when filtering by specific account)
+    final shouldShowOpeningBalance = _filterAccountId != null && transactions.isNotEmpty;
+
+    // Calculate extra items: dates + loading/more indicator + opening balance (if applicable)
+    final baseItemCount = _cachedSortedDates!.length;
+    final loadingItemCount = (isLoadingMore || hasMore ? 1 : 0);
+    final openingBalanceItemCount = (shouldShowOpeningBalance ? 1 : 0);
+    final totalItemCount = baseItemCount + loadingItemCount + openingBalanceItemCount;
+
     return ListView.builder(
       controller: _scrollController,
       padding: const EdgeInsets.only(
@@ -1152,29 +1256,154 @@ class _TransactionListScreenState extends ConsumerState<TransactionListScreen> {
         top: 16,
         bottom: 100, // Space for FAB
       ),
-      itemCount: _cachedSortedDates!.length + (isLoadingMore || hasMore ? 1 : 0),
+      itemCount: totalItemCount,
       itemBuilder: (context, index) {
-        // Show loading indicator at the end
-        if (index >= _cachedSortedDates!.length) {
-          if (isLoadingMore) {
-            return const Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Center(
-                child: CircularProgressIndicator(),
-              ),
-            );
-          } else if (hasMore) {
-            return const SizedBox(height: 50); // Spacer to trigger load
-          }
-          return const SizedBox.shrink();
+        // Transaction date groups
+        if (index < baseItemCount) {
+          final dateKey = _cachedSortedDates![index];
+          final dateTransactions = _cachedGroupedTransactions![dateKey]!;
+          final date = DateTime.parse(dateKey);
+          return _buildDateGroup(date, dateTransactions);
         }
 
-        final dateKey = _cachedSortedDates![index];
-        final dateTransactions = _cachedGroupedTransactions![dateKey]!;
-        final date = DateTime.parse(dateKey);
+        // Opening balance (after all transactions, before loading indicator)
+        if (shouldShowOpeningBalance && index == baseItemCount) {
+          return _buildOpeningBalanceCard();
+        }
 
-        return _buildDateGroup(date, dateTransactions);
+        // Loading indicator at the very end
+        if (isLoadingMore) {
+          return const Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        } else if (hasMore) {
+          return const SizedBox(height: 50); // Spacer to trigger load
+        }
+
+        return const SizedBox.shrink();
       },
+    );
+  }
+
+  Widget _buildOpeningBalanceCard() {
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final accounts = ref.watch(accountsListProvider);
+
+    // Get the filtered account
+    final account = accounts.firstWhere(
+      (a) => a.id == _filterAccountId,
+      orElse: () => accounts.first,
+    );
+
+    return Container(
+      margin: const EdgeInsets.only(bottom: 16, top: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Date header for opening balance
+          Padding(
+            padding: const EdgeInsets.only(bottom: 12, top: 8),
+            child: Row(
+              children: [
+                Icon(
+                  Icons.info_outline,
+                  size: 16,
+                  color: Colors.grey[500],
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  DateFormat('MMM dd, yyyy').format(account.createdAt),
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[500],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Opening balance card (disabled style)
+          Opacity(
+            opacity: 0.6,
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: isDarkMode
+                    ? Colors.grey[800]
+                    : Colors.grey[100],
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: isDarkMode
+                      ? Colors.grey[700]!
+                      : Colors.grey[300]!,
+                  width: 1,
+                ),
+              ),
+              child: Row(
+                children: [
+                  // Icon
+                  Container(
+                    width: 48,
+                    height: 48,
+                    decoration: BoxDecoration(
+                      color: isDarkMode
+                          ? Colors.grey[700]
+                          : Colors.grey[200],
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      Icons.account_balance_outlined,
+                      color: Colors.grey[600],
+                      size: 24,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  // Details
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Opening Balance',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: isDarkMode
+                                ? Colors.grey[400]
+                                : Colors.grey[700],
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          account.name,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey[500],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Amount
+                  Text(
+                    '₹${account.openingBalance.toStringAsFixed(2)}',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: account.openingBalance >= 0
+                          ? (isDarkMode ? Colors.grey[400] : Colors.grey[700])
+                          : Colors.grey[500],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
