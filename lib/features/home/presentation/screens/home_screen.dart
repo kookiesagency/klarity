@@ -412,9 +412,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   padding: const EdgeInsets.all(20),
                   physics: const AlwaysScrollableScrollPhysics(), // Enable pull-to-refresh even when content is short
                   child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Income & Outcome Summary with Filter
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Income & Outcome Summary with Filter
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
