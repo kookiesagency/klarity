@@ -128,7 +128,12 @@ class TransactionNotifier extends StateNotifier<TransactionState> {
 
   /// Load all transactions for profile (without pagination)
   Future<void> loadTransactions(String profileId) async {
-    state = state.copyWith(isLoading: true);
+    // Clear existing transactions immediately to avoid showing stale data
+    state = state.copyWith(
+      transactions: [],
+      isLoading: true,
+      error: null,
+    );
 
     // Auto-lock transactions older than 2 months
     await _repository.autoLockOldTransactions(profileId);
@@ -146,6 +151,7 @@ class TransactionNotifier extends StateNotifier<TransactionState> {
       },
       onFailure: (exception) {
         state = state.copyWith(
+          transactions: [],
           isLoading: false,
           error: exception.message,
         );
@@ -155,7 +161,13 @@ class TransactionNotifier extends StateNotifier<TransactionState> {
 
   /// Load initial page of transactions (optimized for performance)
   Future<void> loadTransactionsPaginated(String profileId, {int limit = 100}) async {
-    state = state.copyWith(isLoading: true, hasMore: true);
+    // Clear existing transactions immediately to avoid showing stale data
+    state = state.copyWith(
+      transactions: [],
+      isLoading: true,
+      hasMore: true,
+      error: null,
+    );
 
     // Auto-lock transactions older than 2 months
     await _repository.autoLockOldTransactions(profileId);
@@ -220,7 +232,12 @@ class TransactionNotifier extends StateNotifier<TransactionState> {
     required String profileId,
     required String accountId,
   }) async {
-    state = state.copyWith(isLoading: true);
+    // Clear existing transactions immediately to avoid showing stale data
+    state = state.copyWith(
+      transactions: [],
+      isLoading: true,
+      error: null,
+    );
 
     final result = await _repository.getTransactionsByAccount(
       profileId: profileId,
@@ -237,6 +254,7 @@ class TransactionNotifier extends StateNotifier<TransactionState> {
       },
       onFailure: (exception) {
         state = state.copyWith(
+          transactions: [],
           isLoading: false,
           error: exception.message,
         );

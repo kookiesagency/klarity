@@ -472,6 +472,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           builder: (context, ref, child) {
                             final transactionState = ref.watch(transactionProvider);
                             final transactions = transactionState.transactions;
+                            final isLoading = transactionState.isLoading;
 
                             final filteredIncome = _getFilteredIncome(transactions);
                             final filteredExpense = _getFilteredExpense(transactions);
@@ -482,9 +483,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   child: _buildSummaryCard(
                                     context,
                                     title: 'Income',
-                                    amount: '₹${filteredIncome.toStringAsFixed(2)}',
+                                    amount: isLoading ? 'Loading...' : '₹${filteredIncome.toStringAsFixed(2)}',
                                     icon: Icons.arrow_downward_rounded,
                                     color: AppColors.success,
+                                    isLoading: isLoading,
                                   ),
                                 ),
                                 const SizedBox(width: 16),
@@ -492,9 +494,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   child: _buildSummaryCard(
                                     context,
                                     title: 'Expenses',
-                                    amount: '₹${filteredExpense.toStringAsFixed(2)}',
+                                    amount: isLoading ? 'Loading...' : '₹${filteredExpense.toStringAsFixed(2)}',
                                     icon: Icons.arrow_upward_rounded,
                                     color: AppColors.error,
+                                    isLoading: isLoading,
                                   ),
                                 ),
                               ],
@@ -1106,6 +1109,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     required String amount,
     required IconData icon,
     required Color color,
+    bool isLoading = false,
   }) {
     final isDarkMode = Theme.of(context).brightness == Brightness.dark;
     return Container(
@@ -1142,14 +1146,39 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
           ),
           const SizedBox(height: 4),
-          Text(
-            amount,
-            style: TextStyle(
-              color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          isLoading
+              ? SizedBox(
+                  height: 22,
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 14,
+                        height: 14,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation<Color>(color),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        amount,
+                        style: TextStyle(
+                          color: (isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary).withOpacity(0.5),
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : Text(
+                  amount,
+                  style: TextStyle(
+                    color: isDarkMode ? AppColors.darkTextPrimary : AppColors.textPrimary,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
         ],
       ),
     );
